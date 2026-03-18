@@ -59,12 +59,19 @@
         </div>
 
         <!-- PANTALLA FINAL -->
-        <div id="pantalla-final" class="pantalla">
-            <h2>Merci pour votre participation !</h2>
-            <p>Vos réponses ont été enregistrées.</p>
-            <div id="resumen-puntuacion"></div>
-            <button onclick="location.reload()" class="btn-primario">Nouveau questionnaire</button>
-        </div>
+       <div id="pantalla-final" class="pantalla">
+       <h2>Merci pour votre participation !</h2>
+       <p>Vos réponses ont été enregistrées.</p>
+       <div id="resumen-puntuacion"></div>
+    
+       <!-- BOTÓN SALIR NUEVO -->
+       <button onclick="window.close()" class="btn-secundario" style="margin-top: 20px;">
+        Fermer le questionnaire
+       </button>
+       <p style="font-size: 0.8em; color: #666; margin-top: 10px;">
+        (Vous pouvez fermer cet onglet si le bouton ne fonctionne pas)
+       </p>
+       </div>
     </div>
 
     <script src="script.js"></script>
