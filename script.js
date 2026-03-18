@@ -151,16 +151,16 @@ const preguntas = [
         ]
     },
     {
-        id: 'C15',
-        tipo: 'casoclinico',
-        texto: 'Quelle information est ESSENTIELLE à noter dans la fiche de traçabilité ?',
-        caso: 'Vous réalisez un pansement sur une plaie chirurgicale de 48h.',
-        opciones: [
-            { valor: 'A', texto: 'Le nom du pansement utilisé' },
-            { valor: 'B', texto: 'État du lit de plaie, dimensions, soin réalisé, date', correcta: true },
-            { valor: 'C', texto: 'L\'humeur du patient' },
-            { valor: 'D', texto: 'Le prix du pansement' }
-        ]
+    id: 'C15',
+    tipo: 'casoclinico',
+    texto: 'Quelle est votre conduite à tenir ?',
+    caso: 'M. Bernard, 67 ans, plaie du talon (plaie de pression stade 2). Le pansement est souillé, décollé, et le patient vous dit que "ça pue un peu". À l\'ablation, vous observez du tissu noir desséché et une odeur nauséabonde.',
+    opciones: [
+        { valor: 'A', texto: 'Recoller le pansement et rassurer le patient' },
+        { valor: 'B', texto: 'Nettoyer avec sérum physiologique et pansement standard' },
+        { valor: 'C', texto: 'Désinfecter avec Bétadine et couvrir' },
+        { valor: 'D', texto: 'Évaluer selon TIME (Tissu non viable, Infection?), contacter médecin pour avis', correcta: true }
+    ]
     }
 ];
 
