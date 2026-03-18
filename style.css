@@ -25,10 +25,15 @@ body {
 
 .pantalla {
     display: none;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.3s ease;
 }
 
 .pantalla.activa {
     display: block;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 h1 {
@@ -87,19 +92,26 @@ select:focus {
     align-items: center;
     font-weight: normal;
     cursor: pointer;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background 0.2s;
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    background: #f8f9fa;
+    border: 2px solid transparent;
 }
 
 .radio-group label:hover {
-    background: #f5f5f5;
+    border-color: #667eea;
+    background: #e7e9ff;
 }
 
 .radio-group input {
     margin-right: 10px;
     width: 18px;
     height: 18px;
+}
+
+.radio-group input:checked + strong {
+    color: #667eea;
 }
 
 /* ESCALA LIKERT */
@@ -192,6 +204,7 @@ select:focus {
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
 }
 
 .btn-primario:hover {
@@ -207,6 +220,7 @@ select:focus {
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.2s;
+    font-size: 16px;
 }
 
 .btn-secundario:hover {
@@ -257,6 +271,8 @@ select:focus {
     border-radius: 10px;
     margin-bottom: 20px;
     border-left: 4px solid #667eea;
+    font-style: italic;
+    color: #555;
 }
 
 /* RESPUESTA FINAL */
@@ -272,6 +288,45 @@ select:focus {
     font-size: 2.5em;
     color: #667eea;
     font-weight: bold;
+}
+
+/* NUEVOS ESTILOS PARA PANTALLA DE BIENVENIDA */
+.info-box {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.info-box h3 {
+    color: #667eea;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.info-box h3:first-child {
+    margin-top: 0;
+}
+
+.info-box p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.info-box ul {
+    margin-left: 20px;
+    color: #555;
+    line-height: 1.8;
+}
+
+.help-text {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 5px;
+    font-style: italic;
 }
 
 /* RESPONSIVE */
