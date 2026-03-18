@@ -8,15 +8,48 @@
 </head>
 <body>
     <div class="container">
-        <!-- PANTALLA DE INICIO: CÓDIGO Y MOMENTO -->
-        <div id="pantalla-inicio" class="pantalla activa">
+        
+        <!-- PANTALLA 0: BIENVENIDA (NUEVA) -->
+        <div id="pantalla-bienvenida" class="pantalla activa">
             <h1>Questionnaire d'évaluation</h1>
             <p class="subtitle">Prise en charge des plaies et cicatrisation</p>
             
+            <div class="info-box">
+                <h3>📋 Objectif</h3>
+                <p>Ce questionnaire évalue les connaissances et pratiques des professionnels de santé en soins de plaies. Les résultats permettront d'adapter la formation continue.</p>
+                
+                <h3>🔒 Anonymat garanti</h3>
+                <ul>
+                    <li>Aucune donnée nominative n'est collectée</li>
+                    <li>Identification par code anonyme uniquement (P01 à P12)</li>
+                    <li>Les résultats sont présentés de manière agrégée</li>
+                </ul>
+                
+                <h3>⏱️ Durée</h3>
+                <p>10-15 minutes maximum</p>
+                
+                <h3>📝 Comment répondre</h3>
+                <ul>
+                    <li><strong>Partie A :</strong> Évaluez votre aisance (1 = pas du tout, 5 = très à l'aise)</li>
+                    <li><strong>Partie B :</strong> Choisissez la bonne réponse parmi 4 options</li>
+                    <li><strong>Partie C :</strong> Lisez attentivement le cas clinique avant de répondre</li>
+                </ul>
+            </div>
+            
+            <button onclick="mostrarPantalla('pantalla-inicio')" class="btn-primario">
+                Commencer le questionnaire →
+            </button>
+        </div>
+
+        <!-- PANTALLA 1: CÓDIGO Y MOMENTO -->
+        <div id="pantalla-inicio" class="pantalla">
+            <h1>Identification</h1>
+            <p class="subtitle">Veuillez sélectionner vos informations</p>
+            
             <div class="form-group">
-                <label for="codigo">Code anonyme :</label>
+                <label for="codigo">Code anonyme : *</label>
                 <select id="codigo" required>
-                    <option value="">-- Sélectionnez --</option>
+                    <option value="">-- Sélectionnez votre code --</option>
                     <option value="P01">P01</option>
                     <option value="P02">P02</option>
                     <option value="P03">P03</option>
@@ -30,20 +63,30 @@
                     <option value="P11">P11</option>
                     <option value="P12">P12</option>
                 </select>
+                <p class="help-text">Ce code vous a été attribué préalablement.</p>
             </div>
             
             <div class="form-group">
-                <label>Moment de l'évaluation :</label>
+                <label>Moment de l'évaluation : *</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="momento" value="Pre-formation" required> Pré-formation</label>
-                    <label><input type="radio" name="momento" value="Post-formation"> Post-formation</label>
+                    <label>
+                        <input type="radio" name="momento" value="Pre-formation" required>
+                        <strong>Pré-formation</strong> - Avant la session de formation
+                    </label>
+                    <label>
+                        <input type="radio" name="momento" value="Post-formation">
+                        <strong>Post-formation</strong> - Après la session de formation
+                    </label>
                 </div>
             </div>
             
-            <button onclick="iniciarCuestionario()" class="btn-primario">Commencer</button>
+            <div class="botones-navegacion">
+                <button onclick="mostrarPantalla('pantalla-bienvenida')" class="btn-secundario">← Retour</button>
+                <button onclick="iniciarCuestionario()" class="btn-primario">Continuer →</button>
+            </div>
         </div>
 
-        <!-- PANTALLA DE PREGUNTAS -->
+        <!-- PANTALLA 2: PREGUNTAS -->
         <div id="pantalla-preguntas" class="pantalla">
             <div class="progress-bar">
                 <div id="progreso" class="progress-fill"></div>
@@ -58,22 +101,30 @@
             </div>
         </div>
 
-        <!-- PANTALLA FINAL -->
-       <div id="pantalla-final" class="pantalla">
-       <h2>Merci pour votre participation !</h2>
-       <p>Vos réponses ont été enregistrées.</p>
-       <div id="resumen-puntuacion"></div>
-    
-       <!-- BOTÓN SALIR NUEVO -->
-       <button onclick="window.close()" class="btn-secundario" style="margin-top: 20px;">
-        Fermer le questionnaire
-       </button>
-       <p style="font-size: 0.8em; color: #666; margin-top: 10px;">
-        (Vous pouvez fermer cet onglet si le bouton ne fonctionne pas)
-       </p>
-       </div>
+        <!-- PANTALLA 3: FINAL -->
+        <div id="pantalla-final" class="pantalla">
+            <h2>Merci pour votre participation !</h2>
+            <p>Vos réponses ont été enregistrées avec succès.</p>
+            
+            <div id="resumen-puntuacion"></div>
+            
+            <div class="info-box" style="margin-top: 20px;">
+                <p><strong>📧 Prochaines étapes :</strong></p>
+                <p>Si vous avez complété ce questionnaire en <strong>pré-formation</strong>, 
+                vous recevrez prochainement la convocation à la session de formation.</p>
+                <p>Si c'était en <strong>post-formation</strong>, votre participation contribue 
+                à l'évaluation de l'efficacité pédagogique.</p>
+            </div>
+            
+            <button onclick="cerrarCuestionario()" class="btn-primario" style="margin-top: 20px;">
+                Fermer le questionnaire
+            </button>
+            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">
+                💡 Astuce : Vous pouvez fermer cet onglet de navigateur
+            </p>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
-</html>
+</html>s
