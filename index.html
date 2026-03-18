@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire Évaluation Soins de Plaies</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- PANTALLA DE INICIO: CÓDIGO Y MOMENTO -->
+        <div id="pantalla-inicio" class="pantalla activa">
+            <h1>Questionnaire d'évaluation</h1>
+            <p class="subtitle">Prise en charge des plaies et cicatrisation</p>
+            
+            <div class="form-group">
+                <label for="codigo">Code anonyme :</label>
+                <select id="codigo" required>
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="P01">P01</option>
+                    <option value="P02">P02</option>
+                    <option value="P03">P03</option>
+                    <option value="P04">P04</option>
+                    <option value="P05">P05</option>
+                    <option value="P06">P06</option>
+                    <option value="P07">P07</option>
+                    <option value="P08">P08</option>
+                    <option value="P09">P09</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Moment de l'évaluation :</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="momento" value="Pre-formation" required> Pré-formation</label>
+                    <label><input type="radio" name="momento" value="Post-formation"> Post-formation</label>
+                </div>
+            </div>
+            
+            <button onclick="iniciarCuestionario()" class="btn-primario">Commencer</button>
+        </div>
+
+        <!-- PANTALLA DE PREGUNTAS -->
+        <div id="pantalla-preguntas" class="pantalla">
+            <div class="progress-bar">
+                <div id="progreso" class="progress-fill"></div>
+            </div>
+            <p class="progress-text">Question <span id="num-pregunta">1</span> sur 15</p>
+            
+            <div id="contenedor-pregunta"></div>
+            
+            <div class="botones-navegacion">
+                <button id="btn-anterior" onclick="preguntaAnterior()" class="btn-secundario" style="display:none;">← Précédent</button>
+                <button id="btn-siguiente" onclick="preguntaSiguiente()" class="btn-primario">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- PANTALLA FINAL -->
+        <div id="pantalla-final" class="pantalla">
+            <h2>Merci pour votre participation !</h2>
+            <p>Vos réponses ont été enregistrées.</p>
+            <div id="resumen-puntuacion"></div>
+            <button onclick="location.reload()" class="btn-primario">Nouveau questionnaire</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

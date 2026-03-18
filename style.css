@@ -1,0 +1,294 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.pantalla {
+    display: none;
+}
+
+.pantalla.activa {
+    display: block;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+}
+
+h2 {
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+}
+
+select, input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.radio-group label:hover {
+    background: #f5f5f5;
+}
+
+.radio-group input {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ESCALA LIKERT */
+.likert-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.likert-option {
+    flex: 1;
+    text-align: center;
+}
+
+.likert-option input {
+    display: none;
+}
+
+.likert-option label {
+    display: block;
+    padding: 15px 5px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9em;
+}
+
+.likert-option label:hover {
+    background: #e0e0e0;
+}
+
+.likert-option input:checked + label {
+    background: #667eea;
+    color: white;
+}
+
+.likert-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* OPCIONES MÚLTIPLE */
+.opciones-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.opcion {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.opcion:hover {
+    background: #e9ecef;
+}
+
+.opcion.seleccionada {
+    border-color: #667eea;
+    background: #e7e9ff;
+}
+
+.opcion input {
+    margin-right: 12px;
+    width: 20px;
+    height: 20px;
+}
+
+/* BOTONES */
+.btn-primario {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secundario {
+    padding: 12px 25px;
+    background: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-secundario:hover {
+    background: #e0e0e0;
+}
+
+.botones-navegacion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+/* BARRA DE PROGRESO */
+.progress-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.progress-text {
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+/* PREGUNTA */
+.pregunta-titulo {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.caso-clinico {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 4px solid #667eea;
+}
+
+/* RESPUESTA FINAL */
+#resumen-puntuacion {
+    background: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.puntuacion-numero {
+    font-size: 2.5em;
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .container {
+        padding: 25px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    .likert-container {
+        flex-wrap: wrap;
+    }
+    
+    .likert-option {
+        min-width: 60px;
+    }
+}
