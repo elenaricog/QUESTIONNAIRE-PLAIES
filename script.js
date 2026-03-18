@@ -150,17 +150,18 @@ const preguntas = [
             { valor: 'D', texto: 'La présence de tissu noir' }
         ]
     },
+    // C15 NUEVA - Diferente a B11, sobre manejo de situación crítica
     {
-    id: 'C15',
-    tipo: 'casoclinico',
-    texto: 'Quelle est votre conduite à tenir ?',
-    caso: 'M. Bernard, 67 ans, plaie du talon (plaie de pression stade 2). Le pansement est souillé, décollé, et le patient vous dit que "ça pue un peu". À l\'ablation, vous observez du tissu noir desséché et une odeur nauséabonde.',
-    opciones: [
-        { valor: 'A', texto: 'Recoller le pansement et rassurer le patient' },
-        { valor: 'B', texto: 'Nettoyer avec sérum physiologique et pansement standard' },
-        { valor: 'C', texto: 'Désinfecter avec Bétadine et couvrir' },
-        { valor: 'D', texto: 'Évaluer selon TIME (Tissu non viable, Infection?), contacter médecin pour avis', correcta: true }
-    ]
+        id: 'C15',
+        tipo: 'casoclinico',
+        texto: 'Quelle est votre conduite à tenir immédiatement ?',
+        caso: 'M. Dupont, 67 ans, plaie du pied diabétique profonde. Vous observez une exposition osseuse, la peau est chaude, rouge étendue (>2cm), et le patient présente une fièvre à 38,5°C.',
+        opciones: [
+            { valor: 'A', texto: 'Nettoyer avec sérum physiologique et appliquer un pansement standard' },
+            { valor: 'B', texto: 'Appeler le médecin immédiatement pour avis spécialisé', correcta: true },
+            { valor: 'C', texto: 'Administrer un antibiotique oral et surveiller 48h' },
+            { valor: 'D', texto: 'Recouvrir la plaie et demander au patient de revenir dans 3 jours' }
+        ]
     }
 ];
 
@@ -174,7 +175,31 @@ let codigo = '';
 let momento = '';
 
 // ==========================================
-// FUNCIONES DE NAVEGACIÓN
+// FUNCIONES DE NAVEGACIÓN ENTRE PANTALLAS
+// ==========================================
+
+function mostrarPantalla(idPantalla) {
+    // Ocultar todas las pantallas
+    document.querySelectorAll('.pantalla').forEach(p => {
+        p.classList.remove('activa');
+    });
+    
+    // Mostrar la solicitada
+    document.getElementById(idPantalla).classList.add('activa');
+}
+
+function cerrarCuestionario() {
+    // Intentar cerrar ventana
+    window.close();
+    
+    // Si no funciona (la mayoría de navegadores bloquean), mostrar mensaje
+    setTimeout(() => {
+        alert('Vous pouvez fermer cet onglet manuellement. Merci !');
+    }, 100);
+}
+
+// ==========================================
+// FUNCIONES DEL CUESTIONARIO
 // ==========================================
 
 function iniciarCuestionario() {
@@ -192,9 +217,8 @@ function iniciarCuestionario() {
     respuestas.momento = momento;
     respuestas.fecha = new Date().toLocaleDateString('fr-FR');
     
-    // Cambiar pantalla
-    document.getElementById('pantalla-inicio').classList.remove('activa');
-    document.getElementById('pantalla-preguntas').classList.add('activa');
+    // Cambiar pantalla usando la nueva función
+    mostrarPantalla('pantalla-preguntas');
     
     // Mostrar primera pregunta
     mostrarPregunta(0);
@@ -282,7 +306,7 @@ function seleccionarOpcion(preguntaId, valor) {
 }
 
 function guardarRespuesta(preguntaId, valor) {
-    respuestas[preguntaId] = valor;
+    respuestas[pregunta.id] = valor;
 }
 
 function restaurarRespuesta(pregunta, valor) {
@@ -346,9 +370,8 @@ function finalizarCuestionario() {
     // Enviar a Google Sheets
     enviarAGoogleSheets();
     
-    // Mostrar pantalla final
-    document.getElementById('pantalla-preguntas').classList.remove('activa');
-    document.getElementById('pantalla-final').classList.add('activa');
+    // Mostrar pantalla final usando la nueva función
+    mostrarPantalla('pantalla-final');
     
     // Mostrar resumen
     document.getElementById('resumen-puntuacion').innerHTML = `
@@ -367,14 +390,12 @@ function finalizarCuestionario() {
 
 function enviarAGoogleSheets() {
     // ==========================================
-    // INSTRUCCIONES PARA CONFIGURAR GOOGLE SHEETS:
+    // IMPORTANTE: PEGA AQUÍ TU URL DE GOOGLE SHEETS
     // 
-    // 1. Crear nueva hoja de cálculo en Google Sheets
-    // 2. Ir a Extensions → Apps Script
-    // 3. Pegar el código que está al final de este archivo
-    // 4. Deploy → New deployment → Web app
-    // 5. Copiar la URL generada
-    // 6. Reemplazar aquí abajo:
+    // 1. Ve a tu Google Sheets → Extensions → Apps Script
+    // 2. Deploy → New deployment → Web app
+    // 3. Copia la URL que te dan (empieza con https://script.google.com/...)
+    // 4. Pégala aquí abajo, reemplazando el texto entre comillas:
     // ==========================================
     
     const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwnVRXEDIoa8hYHqDiSh2GhQEKMDzMw5L61XRMa9noIjdAsRkLQwGaE4MPgRmFM0AOWMg/exec';
@@ -384,7 +405,7 @@ function enviarAGoogleSheets() {
         console.log('=== DATOS DEL CUESTIONARIO ===');
         console.log(respuestas);
         console.log('==============================');
-        console.log('Para guardar en Google Sheets, sigue las instrucciones en el código.');
+        console.log('Para guardar en Google Sheets, pega tu URL en la línea 338 de script.js');
         return;
     }
     
@@ -400,38 +421,3 @@ function enviarAGoogleSheets() {
     .then(() => console.log('Datos enviados correctamente'))
     .catch(err => console.error('Error:', err));
 }
-
-// ==========================================
-// CÓDIGO PARA GOOGLE APPS SCRIPT
-// (Pegar en Extensions → Apps Script de tu Google Sheet)
-// ==========================================
-/*
-function doPost(e) {
-  var data = JSON.parse(e.postData.contents);
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  
-  // Crear encabezados si es la primera fila
-  if (sheet.getLastRow() === 0) {
-    var headers = ['Fecha', 'Código', 'Momento', 'Puntuación', 'A1', 'A2', 'A3', 
-                   'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11',
-                   'C12', 'C13', 'C14', 'C15'];
-    sheet.appendRow(headers);
-  }
-  
-  // Guardar datos
-  var row = [
-    data.fecha,
-    data.codigo,
-    data.momento,
-    data.puntuacion,
-    data.A1, data.A2, data.A3,
-    data.B4, data.B5, data.B6, data.B7, data.B8, data.B9, data.B10, data.B11,
-    data.C12, data.C13, data.C14, data.C15
-  ];
-  
-  sheet.appendRow(row);
-  
-  return ContentService.createTextOutput(JSON.stringify({result: 'success'}))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-*/
