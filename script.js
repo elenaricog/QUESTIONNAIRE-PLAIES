@@ -377,7 +377,7 @@ function enviarAGoogleSheets() {
     // 6. Reemplazar aquí abajo:
     // ==========================================
     
-    const GOOGLE_SHEETS_URL = 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+    const GOOGLE_SHEETS_URL = https://script.google.com/macros/s/AKfycbwnVRXEDIoa8hYHqDiSh2GhQEKMDzMw5L61XRMa9noIjdAsRkLQwGaE4MPgRmFM0AOWMg/exec;
     
     // Si aún no configuraste Google Sheets, los datos se muestran en consola
     if (GOOGLE_SHEETS_URL.includes('PEGA_AQUI')) {
