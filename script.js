@@ -303,10 +303,10 @@ function seleccionarOpcion(preguntaId, valor) {
     input.closest('.opcion').classList.add('seleccionada');
     
     guardarRespuesta(preguntaId, valor);
-}
 
-function guardarRespuesta(preguntaId, valor) {
-    respuestas[pregunta.id] = valor;
+    function guardarRespuesta(preguntaId, valor) {
+    respuestas[preguntaId] = valor;
+    console.log('Respuesta guardada:', preguntaId, '=', valor); // Para depurar
 }
 
 function restaurarRespuesta(pregunta, valor) {
