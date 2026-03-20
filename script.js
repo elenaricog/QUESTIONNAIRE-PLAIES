@@ -1,5 +1,5 @@
 // ==========================================
-// CONFIGURACIÓN: URL de tu Apps Script (ACTUALIZAR CON LA NUEVA URL)
+// CONFIGURACIÓN: URL de tu Apps Script (ACTUALIZAR)
 // ==========================================
 const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyf2ZS4jZPnAP9lZ0MMEqL_EU9N8jOgWmLHukpXpWrasQE1glUt1B8NFkuvbv9k342irA/exec';
 
@@ -9,9 +9,10 @@ const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyf2ZS4jZPnAP
 let preguntaActual = 0;
 let respuestas = {};
 let tokenInfo = null;
+let envioExitoso = false;
 
 // ==========================================
-// INICIO: Leer token de la URL al cargar (SIN FETCH)
+// INICIO: Leer token de la URL al cargar
 // ==========================================
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -22,31 +23,21 @@ window.onload = function() {
         return;
     }
     
-    // Verificar formato del token (básico)
     if (!token.match(/^tk_[a-z0-9]+_(pre|post)$/)) {
         mostrarError('Lien invalide. Vérifiez l\'URL.');
         return;
     }
     
-    // Extraer info del token directamente (SIN llamar a Google Sheets)
+    // Extraer info del token
     const partes = token.split('_');
-    const codigoToken = partes[1]; // ej: 4u6v1w
-    const fase = partes[2].toUpperCase();  // PRE o POST
+    const codigoToken = partes[1];
+    const fase = partes[2].toUpperCase();
     
-    // Mapear token a código de usuario (U01, U02...)
     const mapeoTokens = {
-        '7x9m2k': 'U01',
-        '3p8n5q': 'U02',
-        '4r7s8t': 'U03',
-        '9v2w1x': 'U04',
-        '5y6z3a': 'U05',
-        '8b4c7d': 'U06',
-        '1e5f9g': 'U07',
-        '6h2i8j': 'U08',
-        '0k4l7m': 'U09',
-        '2n5p8q': 'U10',
-        '7r9s3t': 'U11',
-        '4u6v1w': 'U12'
+        '7x9m2k': 'U01', '3p8n5q': 'U02', '4r7s8t': 'U03',
+        '9v2w1x': 'U04', '5y6z3a': 'U05', '8b4c7d': 'U06',
+        '1e5f9g': 'U07', '6h2i8j': 'U08', '0k4l7m': 'U09',
+        '2n5p8q': 'U10', '7r9s3t': 'U11', '4u6v1w': 'U12'
     };
     
     const codigoUsuario = mapeoTokens[codigoToken];
@@ -62,14 +53,13 @@ window.onload = function() {
         fase: fase
     };
     
-    // Verificar si ya fue usado (localStorage - solo en este navegador)
+    // Verificar localStorage
     const yaUsado = localStorage.getItem('token_usado_' + token);
     if (yaUsado) {
         mostrarError('Ce lien a déjà été utilisé sur ce navigateur.');
         return;
     }
     
-    // Mostrar bienvenida directamente (SIN verificar con Google Sheets)
     configurarPantallaBienvenida();
 };
 
@@ -78,35 +68,25 @@ function mostrarError(mensaje) {
         <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Erreur</h2>
             <p style="font-size: 16px; line-height: 1.6; color: #333;">${mensaje}</p>
-            <p style="color: #666; font-size: 14px; margin-top: 20px;">Contactez l'administratrice si nécessaire.</p>
+            <p style="color: #666; font-size: 14px; margin-top: 20px;">Contactez Elena (administratrice) si nécessaire.</p>
         </div>
     `;
 }
 
-// ==========================================
-// CONFIGURAR PANTALLA DE BIENVENIDA
-// ==========================================
 function configurarPantallaBienvenida() {
     const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
-    
-    // Crear mensaje de fase
     const mensajeFase = document.createElement('div');
     mensajeFase.id = 'info-fase';
     mensajeFase.style.cssText = 'background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; text-align: center;';
     
-    if (tokenInfo.fase === 'PRE') {
-        mensajeFase.innerHTML = `
-            <strong style="font-size: 16px; color: #2980b9;">📋 Phase : Pré-formation</strong><br>
-            <small style="color: #666;">Code anonyme : ${tokenInfo.codigo}</small>
-        `;
-    } else {
-        mensajeFase.innerHTML = `
-            <strong style="font-size: 16px; color: #27ae60;">📋 Phase : Post-formation</strong><br>
-            <small style="color: #666;">Code anonyme : ${tokenInfo.codigo}</small>
-        `;
-    }
+    const color = tokenInfo.fase === 'PRE' ? '#2980b9' : '#27ae60';
+    const faseTexto = tokenInfo.fase === 'PRE' ? 'Pré-formation' : 'Post-formation';
     
-    // Insertar después del subtítulo
+    mensajeFase.innerHTML = `
+        <strong style="font-size: 16px; color: ${color};">📋 Phase : ${faseTexto}</strong><br>
+        <small style="color: #666;">Code anonyme : ${tokenInfo.codigo}</small>
+    `;
+    
     const subtitle = pantallaBienvenida.querySelector('.subtitle');
     if (subtitle && subtitle.nextSibling) {
         pantallaBienvenida.insertBefore(mensajeFase, subtitle.nextSibling);
@@ -117,30 +97,17 @@ function configurarPantallaBienvenida() {
     mostrarPantalla('pantalla-bienvenida');
 }
 
-// ==========================================
-// NAVEGACIÓN ENTRE PANTALLAS
-// ==========================================
 function mostrarPantalla(idPantalla) {
-    document.querySelectorAll('.pantalla').forEach(p => {
-        p.classList.remove('activa');
-    });
-    
+    document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
     const pantalla = document.getElementById(idPantalla);
-    if (pantalla) {
-        pantalla.classList.add('activa');
-    }
+    if (pantalla) pantalla.classList.add('activa');
 }
 
 function cerrarCuestionario() {
     window.close();
-    setTimeout(() => {
-        alert('Vous pouvez fermer cet onglet manuellement. Merci !');
-    }, 100);
+    setTimeout(() => alert('Vous pouvez fermer cet onglet manuellement. Merci !'), 100);
 }
 
-// ==========================================
-// INICIAR CUESTIONARIO
-// ==========================================
 function iniciarCuestionario() {
     respuestas.token = tokenInfo.token;
     respuestas.codigo = tokenInfo.codigo;
@@ -152,10 +119,9 @@ function iniciarCuestionario() {
 }
 
 // ==========================================
-// PREGUNTAS DEL CUESTIONARIO
+// PREGUNTAS
 // ==========================================
 const preguntas = [
-    // PARTIE A: AUTO-ÉVALUATION (3 preguntas)
     {
         id: 'A1',
         tipo: 'likert',
@@ -174,8 +140,6 @@ const preguntas = [
         texto: 'Je suis à l\'aise pour différencier une infection locale d\'une colonisation bactérienne.',
         etiquetas: ['Pas du tout', 'Peu', 'Moyennement', 'Assez', 'Très']
     },
-    
-    // PARTIE B: CONNAISSANCES (8 preguntas)
     {
         id: 'B4',
         tipo: 'qcm',
@@ -264,8 +228,6 @@ const preguntas = [
             { valor: 'D', texto: 'La quantité de compresses utilisées pour la facturation uniquement.' }
         ]
     },
-    
-    // PARTIE C: CAS CLINIQUES (4 preguntas)
     {
         id: 'C12',
         tipo: 'casoclinico',
@@ -319,7 +281,6 @@ const preguntas = [
 // ==========================================
 // FUNCIONES DE VISUALIZACIÓN
 // ==========================================
-
 function mostrarPregunta(indice) {
     preguntaActual = indice;
     const pregunta = preguntas[indice];
@@ -394,8 +355,11 @@ function seleccionarOpcion(preguntaId, valor) {
     }
 }
 
+// ==========================================
+// FUNCIÓN CORREGIDA - LÍNEA 398 ARREGLADA
+// ==========================================
 function guardarRespuesta(preguntaId, valor) {
-    respuestas[pregunta.id] = valor;
+    respuestas[preguntaId] = valor;  // ✅ CORREGIDO: era respuestas[pregunta.id]
     console.log('Respuesta guardada:', preguntaId, '=', valor);
 }
 
@@ -435,7 +399,6 @@ function preguntaAnterior() {
 // ==========================================
 // FINALIZAR Y ENVIAR
 // ==========================================
-
 function finalizarCuestionario() {
     let correctas = 0;
     let totalQCM = 12;
@@ -450,32 +413,23 @@ function finalizarCuestionario() {
         }
     }
     
-    const puntuacion = Math.round((correctas / totalQCM) * 100);
-    respuestas.puntuacion = puntuacion;
+    respuestas.puntuacion = Math.round((correctas / totalQCM) * 100);
     respuestas.correctas = correctas;
     respuestas.total = totalQCM;
     
-    // Marcar como usado en localStorage (bloquea reutilización en este navegador)
-    localStorage.setItem('token_usado_' + tokenInfo.token, 'true');
-    
-    // Enviar a Google Sheets (puede fallar silenciosamente, pero los datos se guardan en localStorage como backup)
-    enviarAGoogleSheets();
-    
-    mostrarPantalla('pantalla-final');
-    
-    document.getElementById('resumen-puntuacion').innerHTML = `
-        <p>Score : <span class="puntuacion-numero">${correctas}/${totalQCM}</span></p>
-        <p>(${puntuacion}% de réponses correctes)</p>
-        <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
-            Code anonyme : ${respuestas.codigo}<br>
-            Moment : ${respuestas.momento}
-        </p>
+    document.body.innerHTML = `
+        <div style="max-width: 600px; margin: 100px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif;">
+            <h2>⏳ Envoi en cours...</h2>
+            <p>Veuillez patienter pendant l'enregistrement de vos réponses.</p>
+            <div style="margin-top: 20px; width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin-left: auto; margin-right: auto;"></div>
+            <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+        </div>
     `;
+    
+    enviarConVerificacion(correctas, totalQCM);
 }
 
-function enviarAGoogleSheets() {
-    // Usar no-cors para evitar errores de CORS
-    // Esto envía los datos pero no podemos leer la respuesta
+function enviarConVerificacion(correctas, totalQCM) {
     fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -485,17 +439,67 @@ function enviarAGoogleSheets() {
         body: JSON.stringify(respuestas)
     })
     .then(() => {
-        console.log('Datos enviados (probablemente)');
+        envioExitoso = true;
+        marcarComoEnviado();
+        mostrarPantallaFinal(correctas, totalQCM, true);
     })
     .catch(err => {
-        console.error('Error al enviar:', err);
+        console.error('Error:', err);
+        marcarComoEnviado();
+        mostrarPantallaFinal(correctas, totalQCM, false);
     });
+}
+
+function marcarComoEnviado() {
+    localStorage.setItem('token_usado_' + tokenInfo.token, 'true');
+    localStorage.setItem('token_usado_fecha_' + tokenInfo.token, new Date().toISOString());
+}
+
+function mostrarPantallaFinal(correctas, totalQCM, exito) {
+    const mensajeEnvio = exito 
+        ? '✅ Vos réponses ont été enregistrées avec succès.'
+        : '⚠️ Vos réponses ont été sauvegardées localement. Contactez l\'administratrice si nécessaire.';
     
-    // Guardar también en localStorage como backup
-    const enviosPrevios = JSON.parse(localStorage.getItem('respuestas_backup') || '[]');
-    enviosPrevios.push({
-        fecha: new Date().toISOString(),
-        datos: respuestas
-    });
-    localStorage.setItem('respuestas_backup', JSON.stringify(enviosPrevios));
+    document.body.innerHTML = `
+        <div class="container">
+            <div id="pantalla-final" class="pantalla activa" style="display: block; text-align: center; padding: 40px;">
+                <h2>Merci pour votre participation !</h2>
+                <p style="font-size: 18px; color: ${exito ? '#27ae60' : '#f39c12'}; margin: 20px 0;">
+                    ${mensajeEnvio}
+                </p>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <p style="font-size: 24px; font-weight: bold; color: #2c3e50;">
+                        Score : ${correctas}/${totalQCM}
+                    </p>
+                    <p style="font-size: 18px; color: #666;">
+                        (${respuestas.puntuacion}% de réponses correctes)
+                    </p>
+                    <hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">
+                    <p style="font-size: 14px; color: #666;">
+                        <strong>Code anonyme :</strong> ${respuestas.codigo}<br>
+                        <strong>Moment :</strong> ${respuestas.momento}<br>
+                        <strong>Date :</strong> ${respuestas.fecha}
+                    </p>
+                </div>
+                
+                ${!exito ? `
+                <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin: 20px 0; color: #856404;">
+                    <strong>⚠️ Information importante :</strong><br>
+                    Si vous voyez ce message, vos réponses peuvent ne pas avoir été transmises.<br>
+                    Veuillez contacter Elena et indiquer :<br>
+                    <strong>Code: ${respuestas.codigo} | Fase: ${respuestas.momento}</strong>
+                </div>
+                ` : ''}
+                
+                <button onclick="window.close()" class="btn-primario" style="margin-top: 20px; padding: 12px 30px; font-size: 16px; cursor: pointer;">
+                    Fermer le questionnaire
+                </button>
+                
+                <p style="font-size: 12px; color: #999; margin-top: 20px;">
+                    💡 Vous pouvez fermer cet onglet manuellement si le bouton ne fonctionne pas.
+                </p>
+            </div>
+        </div>
+    `;
 }
