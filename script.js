@@ -150,7 +150,6 @@ const preguntas = [
             { valor: 'D', texto: 'La présence de tissu noir' }
         ]
     },
-    // C15 NUEVA - Diferente a B11, sobre manejo de situación crítica
     {
         id: 'C15',
         tipo: 'casoclinico',
@@ -185,17 +184,54 @@ function mostrarPantalla(idPantalla) {
     });
     
     // Mostrar la solicitada
-    document.getElementById(idPantalla).classList.add('activa');
+    const pantalla = document.getElementById(idPantalla);
+    if (pantalla) {
+        pantalla.classList.add('activa');
+    }
 }
 
 function cerrarCuestionario() {
-    // Intentar cerrar ventana
     window.close();
-    
-    // Si no funciona (la mayoría de navegadores bloquean), mostrar mensaje
     setTimeout(() => {
         alert('Vous pouvez fermer cet onglet manuellement. Merci !');
     }, 100);
+}
+
+// ==========================================
+// FUNCIÓN PARA ACTUALIZAR CÓDIGOS DISPONIBLES
+// ==========================================
+
+function actualizarCodigosDisponibles() {
+    // Lista de todos los códigos posibles
+    const todosLosCodigos = ['P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12'];
+    
+    // Obtener códigos ya usados de localStorage (simulado - en realidad necesitarías backend)
+    // Por ahora, esto es solo visual. Para hacerlo real necesitarías conexión a Google Sheets primero.
+    
+    const select = document.getElementById('codigo');
+    if (!select) return;
+    
+    // Guardar selección actual
+    const seleccionActual = select.value;
+    
+    // Limpiar opciones (mantener solo la primera "Seleccione")
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+    
+    // Añadir todos los códigos (versión simple sin eliminar usados)
+    // Para eliminar usados necesitarías leer de Google Sheets primero
+    todosLosCodigos.forEach(cod => {
+        const option = document.createElement('option');
+        option.value = cod;
+        option.textContent = cod;
+        select.appendChild(option);
+    });
+    
+    // Restaurar selección si existe
+    if (seleccionActual) {
+        select.value = seleccionActual;
+    }
 }
 
 // ==========================================
@@ -203,7 +239,6 @@ function cerrarCuestionario() {
 // ==========================================
 
 function iniciarCuestionario() {
-    // Validar campos
     codigo = document.getElementById('codigo').value;
     momento = document.querySelector('input[name="momento"]:checked')?.value;
     
@@ -212,15 +247,11 @@ function iniciarCuestionario() {
         return;
     }
     
-    // Guardar datos iniciales
     respuestas.codigo = codigo;
     respuestas.momento = momento;
     respuestas.fecha = new Date().toLocaleDateString('fr-FR');
     
-    // Cambiar pantalla usando la nueva función
     mostrarPantalla('pantalla-preguntas');
-    
-    // Mostrar primera pregunta
     mostrarPregunta(0);
 }
 
@@ -229,19 +260,15 @@ function mostrarPregunta(indice) {
     const pregunta = preguntas[indice];
     const contenedor = document.getElementById('contenedor-pregunta');
     
-    // Actualizar progreso
     document.getElementById('num-pregunta').textContent = indice + 1;
     document.getElementById('progreso').style.width = ((indice + 1) / 15 * 100) + '%';
     
-    // Construir HTML de la pregunta
     let html = `<h3 class="pregunta-titulo">${pregunta.id}. ${pregunta.texto}</h3>`;
     
-    // Si es caso clínico, mostrar caja del caso
     if (pregunta.tipo === 'casoclinico') {
         html += `<div class="caso-clinico"><strong>Cas :</strong> ${pregunta.caso}</div>`;
     }
     
-    // Generar opciones según tipo
     if (pregunta.tipo === 'likert') {
         html += generarLikert(pregunta);
     } else {
@@ -250,12 +277,10 @@ function mostrarPregunta(indice) {
     
     contenedor.innerHTML = html;
     
-    // Restaurar respuesta si ya existe
     if (respuestas[pregunta.id]) {
         restaurarRespuesta(pregunta, respuestas[pregunta.id]);
     }
     
-    // Actualizar botones
     document.getElementById('btn-anterior').style.display = indice === 0 ? 'none' : 'inline-block';
     document.getElementById('btn-siguiente').textContent = indice === 14 ? 'Terminer' : 'Suivant →';
 }
@@ -292,21 +317,21 @@ function generarQCM(pregunta) {
 }
 
 function seleccionarOpcion(preguntaId, valor) {
-    // Quitar selección anterior
     document.querySelectorAll(`input[name="${preguntaId}"]`).forEach(el => {
         el.closest('.opcion').classList.remove('seleccionada');
     });
     
-    // Añadir selección nueva
     const input = document.querySelector(`input[name="${preguntaId}"][value="${valor}"]`);
-    input.checked = true;
-    input.closest('.opcion').classList.add('seleccionada');
-    
-    guardarRespuesta(preguntaId, valor);
+    if (input) {
+        input.checked = true;
+        input.closest('.opcion').classList.add('seleccionada');
+        guardarRespuesta(preguntaId, valor);
+    }
+}
 
-    function guardarRespuesta(preguntaId, valor) {
+function guardarRespuesta(preguntaId, valor) {
     respuestas[preguntaId] = valor;
-    console.log('Respuesta guardada:', preguntaId, '=', valor); // Para depurar
+    console.log('Respuesta guardada:', preguntaId, '=', valor);
 }
 
 function restaurarRespuesta(pregunta, valor) {
@@ -323,7 +348,6 @@ function restaurarRespuesta(pregunta, valor) {
 }
 
 function preguntaSiguiente() {
-    // Validar que haya respuesta
     const pregunta = preguntas[preguntaActual];
     if (!respuestas[pregunta.id]) {
         alert('Veuillez sélectionner une réponse avant de continuer.');
@@ -348,9 +372,8 @@ function preguntaAnterior() {
 // ==========================================
 
 function finalizarCuestionario() {
-    // Calcular puntuación
     let correctas = 0;
-    let totalQCM = 12; // B4-B11 (8) + C12-C15 (4) = 12 preguntas con respuesta correcta
+    let totalQCM = 12;
     
     for (let pregunta of preguntas) {
         if (pregunta.tipo !== 'likert') {
@@ -367,13 +390,9 @@ function finalizarCuestionario() {
     respuestas.correctas = correctas;
     respuestas.total = totalQCM;
     
-    // Enviar a Google Sheets
     enviarAGoogleSheets();
-    
-    // Mostrar pantalla final usando la nueva función
     mostrarPantalla('pantalla-final');
     
-    // Mostrar resumen
     document.getElementById('resumen-puntuacion').innerHTML = `
         <p>Score : <span class="puntuacion-numero">${correctas}/${totalQCM}</span></p>
         <p>(${puntuacion}% de réponses correctes)</p>
@@ -389,27 +408,16 @@ function finalizarCuestionario() {
 // ==========================================
 
 function enviarAGoogleSheets() {
-    // ==========================================
-    // IMPORTANTE: PEGA AQUÍ TU URL DE GOOGLE SHEETS
-    // 
-    // 1. Ve a tu Google Sheets → Extensions → Apps Script
-    // 2. Deploy → New deployment → Web app
-    // 3. Copia la URL que te dan (empieza con https://script.google.com/...)
-    // 4. Pégala aquí abajo, reemplazando el texto entre comillas:
-    // ==========================================
+    const GOOGLE_SHEETS_URL = 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT';
     
-    const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwnVRXEDIoa8hYHqDiSh2GhQEKMDzMw5L61XRMa9noIjdAsRkLQwGaE4MPgRmFM0AOWMg/exec';
-    
-    // Si aún no configuraste Google Sheets, los datos se muestran en consola
     if (GOOGLE_SHEETS_URL.includes('PEGA_AQUI')) {
         console.log('=== DATOS DEL CUESTIONARIO ===');
         console.log(respuestas);
         console.log('==============================');
-        console.log('Para guardar en Google Sheets, pega tu URL en la línea 338 de script.js');
+        console.log('Para guardar en Google Sheets, pega tu URL en la línea 394');
         return;
     }
     
-    // Enviar datos
     fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -421,3 +429,11 @@ function enviarAGoogleSheets() {
     .then(() => console.log('Datos enviados correctamente'))
     .catch(err => console.error('Error:', err));
 }
+
+// ==========================================
+// INICIALIZACIÓN AL CARGAR LA PÁGINA
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    actualizarCodigosDisponibles();
+});
