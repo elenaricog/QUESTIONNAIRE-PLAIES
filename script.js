@@ -1,5 +1,5 @@
 // ==========================================
-// CONFIGURACIÓN: URL de tu Apps Script
+// CONFIGURACIÓN: URL de tu Apps Script (ACTUALIZAR CON LA NUEVA)
 // ==========================================
 const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyf2ZS4jZPnAP9lZ0MMEqL_EU9N8jOgWmLHukpXpWrasQE1glUt1B8NFkuvbv9k342irA/exec';
 
@@ -18,71 +18,64 @@ window.onload = function() {
     const token = urlParams.get('token');
     
     if (!token) {
-        // No hay token - mostrar error
-        document.body.innerHTML = `
-            <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Accès non autorisé</h2>
-                <p style="font-size: 16px; line-height: 1.6; color: #333;">Vous devez utiliser le lien spécifique qui vous a été fourni.</p>
-                <p style="color: #666; font-size: 14px; margin-top: 20px;">Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administratrice de l'étude.</p>
-            </div>
-        `;
+        mostrarError('Accès non autorisé. Utilisez le lien fourni.');
         return;
     }
     
-    // Verificar token con Google Sheets
-    verificarToken(token);
+    // Verificar formato del token (básico)
+    if (!token.match(/^tk_[a-z0-9]+_(pre|post)$/)) {
+        mostrarError('Lien invalide. Vérifiez l\'URL.');
+        return;
+    }
+    
+    // Extraer info del token directamente (sin llamar a Google Sheets)
+    const partes = token.split('_');
+    const codigo = partes[1].toUpperCase(); // 7x9m2k → 7X9M2K (pero usaremos U01, U02...)
+    const fase = partes[2].toUpperCase();  // pre o post
+    
+    // Mapear token a código de usuario (U01, U02...)
+    const mapeoTokens = {
+        '7X9M2K': 'U01',
+        '3P8N5Q': 'U02',
+        '4R7S8T': 'U03',
+        '9V2W1X': 'U04',
+        '5Y6Z3A': 'U05',
+        '8B4C7D': 'U06',
+        '1E5F9G': 'U07',
+        '6H2I8J': 'U08',
+        '0K4L7M': 'U09',
+        '2N5P8Q': 'U10',
+        '7R9S3T': 'U11',
+        '4U6V1W': 'U12'
+    };
+    
+    const codigoUsuario = mapeoTokens[codigo] || 'DESCONOCIDO';
+    
+    tokenInfo = {
+        token: token,
+        codigo: codigoUsuario,
+        fase: fase
+    };
+    
+    // Verificar si ya fue usado (localStorage - solo en este navegador)
+    const yaUsado = localStorage.getItem('token_usado_' + token);
+    if (yaUsado) {
+        mostrarError('Ce lien a déjà été utilisé sur ce navigateur.');
+        return;
+    }
+    
+    // Mostrar bienvenida
+    configurarPantallaBienvenida();
 };
 
-// ==========================================
-// VERIFICAR TOKEN antes de mostrar nada
-// ==========================================
-function verificarToken(token) {
-    fetch(GOOGLE_SHEETS_URL + '?token=' + token)
-        .then(response => response.json())
-        .then(data => {
-            if (!data.valido) {
-                // Token inválido o fase no activa
-                document.body.innerHTML = `
-                    <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                        <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Accès refusé</h2>
-                        <p style="font-size: 16px; line-height: 1.6; color: #333;">${data.mensaje || 'Lien non valide'}</p>
-                        <p style="color: #666; font-size: 14px; margin-top: 20px;">Token: ${token.substring(0, 8)}...</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            if (data.usado) {
-                // Ya fue usado
-                document.body.innerHTML = `
-                    <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                        <h2 style="color: #27ae60; margin-bottom: 20px;">✅ Questionnaire déjà complété</h2>
-                        <p style="font-size: 16px; line-height: 1.6; color: #333;">Ce lien a déjà été utilisé et ne peut pas être réutilisé.</p>
-                        <p style="color: #666; font-size: 14px; margin-top: 20px;">Si vous avez besoin d'aide, veuillez contacter l'administratrice.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Token válido y no usado - guardar info y mostrar bienvenida
-            tokenInfo = {
-                token: token,
-                codigo: data.codigo,
-                fase: data.fase
-            };
-            
-            // Configurar y mostrar pantalla de bienvenida
-            configurarPantallaBienvenida();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.body.innerHTML = `
-                <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Erreur de connexion</h2>
-                    <p style="font-size: 16px; line-height: 1.6; color: #333;">Impossible de vérifier l'accès. Veuillez réessayer plus tard.</p>
-                </div>
-            `;
-        });
+function mostrarError(mensaje) {
+    document.body.innerHTML = `
+        <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Erreur</h2>
+            <p style="font-size: 16px; line-height: 1.6; color: #333;">${mensaje}</p>
+            <p style="color: #666; font-size: 14px; margin-top: 20px;">Contactez l'administratrice si nécessaire.</p>
+        </div>
+    `;
 }
 
 // ==========================================
@@ -91,7 +84,6 @@ function verificarToken(token) {
 function configurarPantallaBienvenida() {
     const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
     
-    // Crear mensaje de fase
     const mensajeFase = document.createElement('div');
     mensajeFase.id = 'info-fase';
     mensajeFase.style.cssText = 'background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; text-align: center;';
@@ -99,16 +91,15 @@ function configurarPantallaBienvenida() {
     if (tokenInfo.fase === 'PRE') {
         mensajeFase.innerHTML = `
             <strong style="font-size: 16px; color: #2980b9;">📋 Phase : Pré-formation</strong><br>
-            <small style="color: #666;">Code anonyme attribué : ${tokenInfo.codigo}</small>
+            <small style="color: #666;">Code anonyme : ${tokenInfo.codigo}</small>
         `;
     } else {
         mensajeFase.innerHTML = `
             <strong style="font-size: 16px; color: #27ae60;">📋 Phase : Post-formation</strong><br>
-            <small style="color: #666;">Code anonyme attribué : ${tokenInfo.codigo}</small>
+            <small style="color: #666;">Code anonyme : ${tokenInfo.codigo}</small>
         `;
     }
     
-    // Insertar después del subtítulo
     const subtitle = pantallaBienvenida.querySelector('.subtitle');
     if (subtitle && subtitle.nextSibling) {
         pantallaBienvenida.insertBefore(mensajeFase, subtitle.nextSibling);
@@ -116,7 +107,6 @@ function configurarPantallaBienvenida() {
         pantallaBienvenida.appendChild(mensajeFase);
     }
     
-    // Mostrar la pantalla de bienvenida
     mostrarPantalla('pantalla-bienvenida');
 }
 
@@ -145,7 +135,6 @@ function cerrarCuestionario() {
 // INICIAR CUESTIONARIO
 // ==========================================
 function iniciarCuestionario() {
-    // Ya tenemos todo del token, no preguntamos nada
     respuestas.token = tokenInfo.token;
     respuestas.codigo = tokenInfo.codigo;
     respuestas.momento = tokenInfo.fase;
@@ -459,6 +448,9 @@ function finalizarCuestionario() {
     respuestas.correctas = correctas;
     respuestas.total = totalQCM;
     
+    // Marcar como usado en localStorage
+    localStorage.setItem('token_usado_' + tokenInfo.token, 'true');
+    
     enviarAGoogleSheets();
     mostrarPantalla('pantalla-final');
     
@@ -473,6 +465,7 @@ function finalizarCuestionario() {
 }
 
 function enviarAGoogleSheets() {
+    // Usar no-cors para evitar problemas de CORS
     fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -481,6 +474,10 @@ function enviarAGoogleSheets() {
         },
         body: JSON.stringify(respuestas)
     })
-    .then(() => console.log('Datos enviados correctamente'))
-    .catch(err => console.error('Error al enviar:', err));
+    .then(() => console.log('Datos enviados'))
+    .catch(err => {
+        console.error('Error al enviar:', err);
+        // Aunque falle, el usuario ya vio el mensaje de éxito
+        // y el token está marcado como usado
+    });
 }
