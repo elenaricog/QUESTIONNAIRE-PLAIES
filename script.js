@@ -1,5 +1,5 @@
 // ==========================================
-// CONFIGURACIÓN: URL de tu Apps Script (ACTUALIZAR CON LA NUEVA)
+// CONFIGURACIÓN: URL de tu Apps Script (ACTUALIZAR CON LA NUEVA URL)
 // ==========================================
 const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyf2ZS4jZPnAP9lZ0MMEqL_EU9N8jOgWmLHukpXpWrasQE1glUt1B8NFkuvbv9k342irA/exec';
 
@@ -11,7 +11,7 @@ let respuestas = {};
 let tokenInfo = null;
 
 // ==========================================
-// INICIO: Leer token de la URL al cargar
+// INICIO: Leer token de la URL al cargar (SIN FETCH)
 // ==========================================
 window.onload = function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,28 +28,33 @@ window.onload = function() {
         return;
     }
     
-    // Extraer info del token directamente (sin llamar a Google Sheets)
+    // Extraer info del token directamente (SIN llamar a Google Sheets)
     const partes = token.split('_');
-    const codigo = partes[1].toUpperCase(); // 7x9m2k → 7X9M2K (pero usaremos U01, U02...)
-    const fase = partes[2].toUpperCase();  // pre o post
+    const codigoToken = partes[1]; // ej: 4u6v1w
+    const fase = partes[2].toUpperCase();  // PRE o POST
     
     // Mapear token a código de usuario (U01, U02...)
     const mapeoTokens = {
-        '7X9M2K': 'U01',
-        '3P8N5Q': 'U02',
-        '4R7S8T': 'U03',
-        '9V2W1X': 'U04',
-        '5Y6Z3A': 'U05',
-        '8B4C7D': 'U06',
-        '1E5F9G': 'U07',
-        '6H2I8J': 'U08',
-        '0K4L7M': 'U09',
-        '2N5P8Q': 'U10',
-        '7R9S3T': 'U11',
-        '4U6V1W': 'U12'
+        '7x9m2k': 'U01',
+        '3p8n5q': 'U02',
+        '4r7s8t': 'U03',
+        '9v2w1x': 'U04',
+        '5y6z3a': 'U05',
+        '8b4c7d': 'U06',
+        '1e5f9g': 'U07',
+        '6h2i8j': 'U08',
+        '0k4l7m': 'U09',
+        '2n5p8q': 'U10',
+        '7r9s3t': 'U11',
+        '4u6v1w': 'U12'
     };
     
-    const codigoUsuario = mapeoTokens[codigo] || 'DESCONOCIDO';
+    const codigoUsuario = mapeoTokens[codigoToken];
+    
+    if (!codigoUsuario) {
+        mostrarError('Token non reconnu. Contactez l\'administratrice.');
+        return;
+    }
     
     tokenInfo = {
         token: token,
@@ -64,7 +69,7 @@ window.onload = function() {
         return;
     }
     
-    // Mostrar bienvenida
+    // Mostrar bienvenida directamente (SIN verificar con Google Sheets)
     configurarPantallaBienvenida();
 };
 
@@ -84,6 +89,7 @@ function mostrarError(mensaje) {
 function configurarPantallaBienvenida() {
     const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
     
+    // Crear mensaje de fase
     const mensajeFase = document.createElement('div');
     mensajeFase.id = 'info-fase';
     mensajeFase.style.cssText = 'background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; text-align: center;';
@@ -100,6 +106,7 @@ function configurarPantallaBienvenida() {
         `;
     }
     
+    // Insertar después del subtítulo
     const subtitle = pantallaBienvenida.querySelector('.subtitle');
     if (subtitle && subtitle.nextSibling) {
         pantallaBienvenida.insertBefore(mensajeFase, subtitle.nextSibling);
@@ -388,7 +395,7 @@ function seleccionarOpcion(preguntaId, valor) {
 }
 
 function guardarRespuesta(preguntaId, valor) {
-    respuestas[preguntaId] = valor;
+    respuestas[pregunta.id] = valor;
     console.log('Respuesta guardada:', preguntaId, '=', valor);
 }
 
@@ -448,10 +455,12 @@ function finalizarCuestionario() {
     respuestas.correctas = correctas;
     respuestas.total = totalQCM;
     
-    // Marcar como usado en localStorage
+    // Marcar como usado en localStorage (bloquea reutilización en este navegador)
     localStorage.setItem('token_usado_' + tokenInfo.token, 'true');
     
+    // Enviar a Google Sheets (puede fallar silenciosamente, pero los datos se guardan en localStorage como backup)
     enviarAGoogleSheets();
+    
     mostrarPantalla('pantalla-final');
     
     document.getElementById('resumen-puntuacion').innerHTML = `
@@ -465,7 +474,8 @@ function finalizarCuestionario() {
 }
 
 function enviarAGoogleSheets() {
-    // Usar no-cors para evitar problemas de CORS
+    // Usar no-cors para evitar errores de CORS
+    // Esto envía los datos pero no podemos leer la respuesta
     fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -474,10 +484,18 @@ function enviarAGoogleSheets() {
         },
         body: JSON.stringify(respuestas)
     })
-    .then(() => console.log('Datos enviados'))
+    .then(() => {
+        console.log('Datos enviados (probablemente)');
+    })
     .catch(err => {
         console.error('Error al enviar:', err);
-        // Aunque falle, el usuario ya vio el mensaje de éxito
-        // y el token está marcado como usado
     });
+    
+    // Guardar también en localStorage como backup
+    const enviosPrevios = JSON.parse(localStorage.getItem('respuestas_backup') || '[]');
+    enviosPrevios.push({
+        fecha: new Date().toISOString(),
+        datos: respuestas
+    });
+    localStorage.setItem('respuestas_backup', JSON.stringify(enviosPrevios));
 }
