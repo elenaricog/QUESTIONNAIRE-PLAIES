@@ -178,12 +178,10 @@ let momento = '';
 // ==========================================
 
 function mostrarPantalla(idPantalla) {
-    // Ocultar todas las pantallas
     document.querySelectorAll('.pantalla').forEach(p => {
         p.classList.remove('activa');
     });
     
-    // Mostrar la solicitada
     const pantalla = document.getElementById(idPantalla);
     if (pantalla) {
         pantalla.classList.add('activa');
@@ -195,43 +193,6 @@ function cerrarCuestionario() {
     setTimeout(() => {
         alert('Vous pouvez fermer cet onglet manuellement. Merci !');
     }, 100);
-}
-
-// ==========================================
-// FUNCIÓN PARA ACTUALIZAR CÓDIGOS DISPONIBLES
-// ==========================================
-
-function actualizarCodigosDisponibles() {
-    // Lista de todos los códigos posibles
-    const todosLosCodigos = ['P01', 'P02', 'P03', 'P04', 'P05', 'P06', 'P07', 'P08', 'P09', 'P10', 'P11', 'P12'];
-    
-    // Obtener códigos ya usados de localStorage (simulado - en realidad necesitarías backend)
-    // Por ahora, esto es solo visual. Para hacerlo real necesitarías conexión a Google Sheets primero.
-    
-    const select = document.getElementById('codigo');
-    if (!select) return;
-    
-    // Guardar selección actual
-    const seleccionActual = select.value;
-    
-    // Limpiar opciones (mantener solo la primera "Seleccione")
-    while (select.options.length > 1) {
-        select.remove(1);
-    }
-    
-    // Añadir todos los códigos (versión simple sin eliminar usados)
-    // Para eliminar usados necesitarías leer de Google Sheets primero
-    todosLosCodigos.forEach(cod => {
-        const option = document.createElement('option');
-        option.value = cod;
-        option.textContent = cod;
-        select.appendChild(option);
-    });
-    
-    // Restaurar selección si existe
-    if (seleccionActual) {
-        select.value = seleccionActual;
-    }
 }
 
 // ==========================================
@@ -414,7 +375,6 @@ function enviarAGoogleSheets() {
         console.log('=== DATOS DEL CUESTIONARIO ===');
         console.log(respuestas);
         console.log('==============================');
-        console.log('Para guardar en Google Sheets, pega tu URL en la línea 394');
         return;
     }
     
@@ -429,11 +389,3 @@ function enviarAGoogleSheets() {
     .then(() => console.log('Datos enviados correctamente'))
     .catch(err => console.error('Error:', err));
 }
-
-// ==========================================
-// INICIALIZACIÓN AL CARGAR LA PÁGINA
-// ==========================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    actualizarCodigosDisponibles();
-});
