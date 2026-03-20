@@ -1,9 +1,165 @@
 // ==========================================
-// CONFIGURACIÓN: PREGUNTAS DEL CUESTIONARIO
+// CONFIGURACIÓN: URL de tu Apps Script
 // ==========================================
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwnVRXEDIoa8hYHqDiSh2GhQEKMDzMw5L61XRMa9noIjdAsRkLQwGaE4MPgRmFM0AOWMg/exec';
 
+// ==========================================
+// VARIABLES GLOBALES
+// ==========================================
+let preguntaActual = 0;
+let respuestas = {};
+let tokenInfo = null;
+
+// ==========================================
+// INICIO: Leer token de la URL al cargar
+// ==========================================
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    
+    if (!token) {
+        // No hay token - mostrar error
+        document.body.innerHTML = `
+            <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Accès non autorisé</h2>
+                <p style="font-size: 16px; line-height: 1.6; color: #333;">Vous devez utiliser le lien spécifique qui vous a été fourni.</p>
+                <p style="color: #666; font-size: 14px; margin-top: 20px;">Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administratrice de l'étude.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Verificar token con Google Sheets
+    verificarToken(token);
+};
+
+// ==========================================
+// VERIFICAR TOKEN antes de mostrar nada
+// ==========================================
+function verificarToken(token) {
+    fetch(GOOGLE_SHEETS_URL + '?token=' + token)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.valido) {
+                // Token inválido o fase no activa
+                document.body.innerHTML = `
+                    <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Accès refusé</h2>
+                        <p style="font-size: 16px; line-height: 1.6; color: #333;">${data.mensaje || 'Lien non valide'}</p>
+                        <p style="color: #666; font-size: 14px; margin-top: 20px;">Token: ${token.substring(0, 8)}...</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (data.usado) {
+                // Ya fue usado
+                document.body.innerHTML = `
+                    <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h2 style="color: #27ae60; margin-bottom: 20px;">✅ Questionnaire déjà complété</h2>
+                        <p style="font-size: 16px; line-height: 1.6; color: #333;">Ce lien a déjà été utilisé et ne peut pas être réutilisé.</p>
+                        <p style="color: #666; font-size: 14px; margin-top: 20px;">Si vous avez besoin d'aide, veuillez contacter l'administratrice.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Token válido y no usado - guardar info y mostrar bienvenida
+            tokenInfo = {
+                token: token,
+                codigo: data.codigo,
+                fase: data.fase
+            };
+            
+            // Configurar y mostrar pantalla de bienvenida
+            configurarPantallaBienvenida();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.body.innerHTML = `
+                <div style="max-width: 600px; margin: 50px auto; padding: 30px; text-align: center; font-family: Arial, sans-serif; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <h2 style="color: #e74c3c; margin-bottom: 20px;">⚠️ Erreur de connexion</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #333;">Impossible de vérifier l'accès. Veuillez réessayer plus tard.</p>
+                </div>
+            `;
+        });
+}
+
+// ==========================================
+// CONFIGURAR PANTALLA DE BIENVENIDA
+// ==========================================
+function configurarPantallaBienvenida() {
+    const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
+    
+    // Crear mensaje de fase
+    const mensajeFase = document.createElement('div');
+    mensajeFase.id = 'info-fase';
+    mensajeFase.style.cssText = 'background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; text-align: center;';
+    
+    if (tokenInfo.fase === 'PRE') {
+        mensajeFase.innerHTML = `
+            <strong style="font-size: 16px; color: #2980b9;">📋 Phase : Pré-formation</strong><br>
+            <small style="color: #666;">Code anonyme attribué : ${tokenInfo.codigo}</small>
+        `;
+    } else {
+        mensajeFase.innerHTML = `
+            <strong style="font-size: 16px; color: #27ae60;">📋 Phase : Post-formation</strong><br>
+            <small style="color: #666;">Code anonyme attribué : ${tokenInfo.codigo}</small>
+        `;
+    }
+    
+    // Insertar después del subtítulo
+    const subtitle = pantallaBienvenida.querySelector('.subtitle');
+    if (subtitle && subtitle.nextSibling) {
+        pantallaBienvenida.insertBefore(mensajeFase, subtitle.nextSibling);
+    } else {
+        pantallaBienvenida.appendChild(mensajeFase);
+    }
+    
+    // Mostrar la pantalla de bienvenida
+    mostrarPantalla('pantalla-bienvenida');
+}
+
+// ==========================================
+// NAVEGACIÓN ENTRE PANTALLAS
+// ==========================================
+function mostrarPantalla(idPantalla) {
+    document.querySelectorAll('.pantalla').forEach(p => {
+        p.classList.remove('activa');
+    });
+    
+    const pantalla = document.getElementById(idPantalla);
+    if (pantalla) {
+        pantalla.classList.add('activa');
+    }
+}
+
+function cerrarCuestionario() {
+    window.close();
+    setTimeout(() => {
+        alert('Vous pouvez fermer cet onglet manuellement. Merci !');
+    }, 100);
+}
+
+// ==========================================
+// INICIAR CUESTIONARIO
+// ==========================================
+function iniciarCuestionario() {
+    // Ya tenemos todo del token, no preguntamos nada
+    respuestas.token = tokenInfo.token;
+    respuestas.codigo = tokenInfo.codigo;
+    respuestas.momento = tokenInfo.fase;
+    respuestas.fecha = new Date().toLocaleDateString('fr-FR');
+    
+    mostrarPantalla('pantalla-preguntas');
+    mostrarPregunta(0);
+}
+
+// ==========================================
+// PREGUNTAS DEL CUESTIONARIO
+// ==========================================
 const preguntas = [
-    // PARTIE A: AUTO-ÉVALUATION (3 preguntas - escala 1-5)
+    // PARTIE A: AUTO-ÉVALUATION (3 preguntas)
     {
         id: 'A1',
         tipo: 'likert',
@@ -23,7 +179,7 @@ const preguntas = [
         etiquetas: ['Pas du tout', 'Peu', 'Moyennement', 'Assez', 'Très']
     },
     
-    // PARTIE B: CONNAISSANCES (8 preguntas - QCM)
+    // PARTIE B: CONNAISSANCES (8 preguntas)
     {
         id: 'B4',
         tipo: 'qcm',
@@ -165,56 +321,8 @@ const preguntas = [
 ];
 
 // ==========================================
-// VARIABLES GLOBALES
+// FUNCIONES DE VISUALIZACIÓN
 // ==========================================
-
-let preguntaActual = 0;
-let respuestas = {};
-let codigo = '';
-let momento = '';
-
-// ==========================================
-// FUNCIONES DE NAVEGACIÓN ENTRE PANTALLAS
-// ==========================================
-
-function mostrarPantalla(idPantalla) {
-    document.querySelectorAll('.pantalla').forEach(p => {
-        p.classList.remove('activa');
-    });
-    
-    const pantalla = document.getElementById(idPantalla);
-    if (pantalla) {
-        pantalla.classList.add('activa');
-    }
-}
-
-function cerrarCuestionario() {
-    window.close();
-    setTimeout(() => {
-        alert('Vous pouvez fermer cet onglet manuellement. Merci !');
-    }, 100);
-}
-
-// ==========================================
-// FUNCIONES DEL CUESTIONARIO
-// ==========================================
-
-function iniciarCuestionario() {
-    codigo = document.getElementById('codigo').value;
-    momento = document.querySelector('input[name="momento"]:checked')?.value;
-    
-    if (!codigo || !momento) {
-        alert('Veuillez sélectionner votre code et le moment de l\'évaluation.');
-        return;
-    }
-    
-    respuestas.codigo = codigo;
-    respuestas.momento = momento;
-    respuestas.fecha = new Date().toLocaleDateString('fr-FR');
-    
-    mostrarPantalla('pantalla-preguntas');
-    mostrarPregunta(0);
-}
 
 function mostrarPregunta(indice) {
     preguntaActual = indice;
@@ -329,7 +437,7 @@ function preguntaAnterior() {
 }
 
 // ==========================================
-// FINALIZAR Y ENVIAR A GOOGLE SHEETS
+// FINALIZAR Y ENVIAR
 // ==========================================
 
 function finalizarCuestionario() {
@@ -358,26 +466,13 @@ function finalizarCuestionario() {
         <p>Score : <span class="puntuacion-numero">${correctas}/${totalQCM}</span></p>
         <p>(${puntuacion}% de réponses correctes)</p>
         <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
-            Code : ${respuestas.codigo}<br>
+            Code anonyme : ${respuestas.codigo}<br>
             Moment : ${respuestas.momento}
         </p>
     `;
 }
 
-// ==========================================
-// CONEXIÓN A GOOGLE SHEETS
-// ==========================================
-
 function enviarAGoogleSheets() {
-    const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwnVRXEDIoa8hYHqDiSh2GhQEKMDzMw5L61XRMa9noIjdAsRkLQwGaE4MPgRmFM0AOWMg/exec';
-    
-    if (GOOGLE_SHEETS_URL.includes('PEGA_AQUI')) {
-        console.log('=== DATOS DEL CUESTIONARIO ===');
-        console.log(respuestas);
-        console.log('==============================');
-        return;
-    }
-    
     fetch(GOOGLE_SHEETS_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -387,5 +482,5 @@ function enviarAGoogleSheets() {
         body: JSON.stringify(respuestas)
     })
     .then(() => console.log('Datos enviados correctamente'))
-    .catch(err => console.error('Error:', err));
+    .catch(err => console.error('Error al enviar:', err));
 }
