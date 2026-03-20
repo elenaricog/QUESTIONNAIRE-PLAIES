@@ -408,7 +408,7 @@ function finalizarCuestionario() {
 // ==========================================
 
 function enviarAGoogleSheets() {
-    const GOOGLE_SHEETS_URL = 'PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT';
+    const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwnVRXEDIoa8hYHqDiSh2GhQEKMDzMw5L61XRMa9noIjdAsRkLQwGaE4MPgRmFM0AOWMg/exec';
     
     if (GOOGLE_SHEETS_URL.includes('PEGA_AQUI')) {
         console.log('=== DATOS DEL CUESTIONARIO ===');
