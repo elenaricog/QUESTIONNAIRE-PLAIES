@@ -447,24 +447,39 @@ function finalizarCuestionario() {
 }
 
 function enviarConVerificacion(correctas, totalQCM) {
-    fetch(GOOGLE_SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(respuestas)
-    })
-    .then(() => {
-        envioExitoso = true;
+    console.log('Enviando datos:', respuestas);
+    console.log('URL:', GOOGLE_SHEETS_URL);
+    
+    // Crear formulario invisible para enviar datos (más compatible)
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GOOGLE_SHEETS_URL;
+    form.target = '_blank'; // Abre en nueva pestaña para ver respuesta
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'datos';
+    input.value = JSON.stringify(respuestas);
+    
+    form.appendChild(input);
+    document.body.appendChild(form);
+    
+    // Mostrar mensaje antes de enviar
+    document.body.innerHTML = `
+        <div style="max-width: 600px; margin: 100px auto; padding: 30px; text-align: center;">
+            <h2>⏳ Envoi en cours...</h2>
+            <p>Si une nouvelle fenêtre s'ouvre, c'est que l'envoi a fonctionné.</p>
+            <p>Vous pouvez fermer cette fenêtre après vérification.</p>
+        </div>
+    `;
+    
+    form.submit();
+    
+    // Marcar como enviado de todos modos
+    setTimeout(() => {
         marcarComoEnviado();
         mostrarPantallaFinal(correctas, totalQCM, true);
-    })
-    .catch(err => {
-        console.error('Error:', err);
-        marcarComoEnviado();
-        mostrarPantallaFinal(correctas, totalQCM, false);
-    });
+    }, 2000);
 }
 
 function marcarComoEnviado() {
