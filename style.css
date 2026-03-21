@@ -1,3 +1,6 @@
+/* ==========================================
+   ESTILOS BÁSICOS
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -5,228 +8,246 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    line-height: 1.6;
 }
 
 .container {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 600px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
+/* ==========================================
+   SISTEMA DE PANTALLAS (IMPORTANTE)
+   ========================================== */
 .pantalla {
-    display: none;
-    opacity: 0;
-    transform: translateX(20px);
-    transition: all 0.3s ease;
-}
-
-.pantalla.activa {
-    display: block;
-    opacity: 1;
-    transform: translateX(0);
-}
-
-h1 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 1.8em;
-}
-
-h2 {
-    color: #667eea;
-    text-align: center;
+    display: none;  /* ← Todas ocultas por defecto */
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 
+.pantalla.activa {
+    display: block;  /* ← Solo la activa visible */
+}
+
+/* ==========================================
+   TIPOGRAFÍA
+   ========================================== */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+h2 {
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
 .subtitle {
-    text-align: center;
-    color: #666;
-    margin-bottom: 30px;
-    font-size: 1.1em;
-}
-
-.form-group {
-    margin-bottom: 25px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #333;
-    font-weight: 600;
-}
-
-select, input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
+    color: #7f8c8d;
     font-size: 16px;
-    transition: border-color 0.3s;
+    margin-bottom: 20px;
 }
 
-select:focus {
-    outline: none;
-    border-color: #667eea;
+/* ==========================================
+   CAJAS DE INFO
+   ========================================== */
+.info-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
 }
 
-.radio-group {
+.info-box h3 {
+    color: #2c3e50;
+    margin: 15px 0 10px 0;
+    font-size: 16px;
+}
+
+.info-box h3:first-child {
+    margin-top: 0;
+}
+
+.info-box ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.info-box li {
+    margin-bottom: 5px;
+}
+
+/* ==========================================
+   BOTONES
+   ========================================== */
+.btn-primario {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.btn-primario:hover {
+    background: #2980b9;
+}
+
+.btn-secundario {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   BARRA DE PROGRESO
+   ========================================== */
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #ecf0f1;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #3498db;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ==========================================
+   PREGUNTAS
+   ========================================== */
+.pregunta-titulo {
+    font-size: 18px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.caso-clinico {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 5px 5px 0;
+    font-style: italic;
+}
+
+/* ==========================================
+   OPCIONES QCM
+   ========================================== */
+.opciones-container {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
-.radio-group label {
+.opcion {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
-    font-weight: normal;
-    cursor: pointer;
-    padding: 15px;
-    border-radius: 10px;
-    transition: all 0.2s;
-    background: #f8f9fa;
-    border: 2px solid transparent;
+    gap: 10px;
 }
 
-.radio-group label:hover {
-    border-color: #667eea;
-    background: #e7e9ff;
+.opcion:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
 }
 
-.radio-group input {
-    margin-right: 10px;
-    width: 18px;
-    height: 18px;
+.opcion.seleccionada {
+    background: #d4edda;
+    border-color: #28a745;
 }
 
-.radio-group input:checked + strong {
-    color: #667eea;
+.opcion input[type="radio"] {
+    margin: 0;
 }
 
-/* ESCALA LIKERT */
+/* ==========================================
+   ESCALA LIKERT
+   ========================================== */
 .likert-container {
     display: flex;
     justify-content: space-between;
-    margin: 20px 0;
+    max-width: 500px;
+    margin: 20px auto;
     gap: 10px;
 }
 
 .likert-option {
-    flex: 1;
     text-align: center;
+    flex: 1;
 }
 
-.likert-option input {
+.likert-option input[type="radio"] {
     display: none;
 }
 
 .likert-option label {
     display: block;
-    padding: 15px 5px;
-    background: #f0f0f0;
-    border-radius: 10px;
+    padding: 20px 10px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s;
-    font-size: 0.9em;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.likert-option input[type="radio"]:checked + label {
+    background: #3498db;
+    color: white;
+    border-color: #2980b9;
 }
 
 .likert-option label:hover {
-    background: #e0e0e0;
-}
-
-.likert-option input:checked + label {
-    background: #667eea;
-    color: white;
+    background: #e9ecef;
 }
 
 .likert-labels {
     display: flex;
     justify-content: space-between;
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 5px;
+    max-width: 500px;
+    margin: 10px auto;
+    font-size: 12px;
+    color: #6c757d;
 }
 
-/* OPCIONES MÚLTIPLE */
-.opciones-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.opcion {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid transparent;
-}
-
-.opcion:hover {
-    background: #e9ecef;
-}
-
-.opcion.seleccionada {
-    border-color: #667eea;
-    background: #e7e9ff;
-}
-
-.opcion input {
-    margin-right: 12px;
-    width: 20px;
-    height: 20px;
-}
-
-/* BOTONES */
-.btn-primario {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin-top: 10px;
-}
-
-.btn-primario:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-}
-
-.btn-secundario {
-    padding: 12px 25px;
-    background: #f0f0f0;
-    color: #333;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.2s;
-    font-size: 16px;
-}
-
-.btn-secundario:hover {
-    background: #e0e0e0;
-}
-
+/* ==========================================
+   BOTONES DE NAVEGACIÓN
+   ========================================== */
 .botones-navegacion {
     display: flex;
     justify-content: space-between;
@@ -234,116 +255,32 @@ select:focus {
     gap: 15px;
 }
 
-/* BARRA DE PROGRESO */
-.progress-bar {
-    height: 8px;
-    background: #e0e0e0;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    overflow: hidden;
+.botones-navegacion button {
+    flex: 1;
 }
 
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    width: 0%;
-    transition: width 0.3s;
-}
-
-.progress-text {
-    text-align: center;
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 20px;
-}
-
-/* PREGUNTA */
-.pregunta-titulo {
-    font-size: 1.2em;
-    color: #333;
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.caso-clinico {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border-left: 4px solid #667eea;
-    font-style: italic;
-    color: #555;
-}
-
-/* RESPUESTA FINAL */
-#resumen-puntuacion {
-    background: #f0f0f0;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px 0;
-    text-align: center;
-}
-
-.puntuacion-numero {
-    font-size: 2.5em;
-    color: #667eea;
-    font-weight: bold;
-}
-
-/* NUEVOS ESTILOS PARA PANTALLA DE BIENVENIDA */
-.info-box {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 25px;
-    margin: 20px 0;
-    text-align: left;
-}
-
-.info-box h3 {
-    color: #667eea;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-}
-
-.info-box h3:first-child {
-    margin-top: 0;
-}
-
-.info-box p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-
-.info-box ul {
-    margin-left: 20px;
-    color: #555;
-    line-height: 1.8;
-}
-
-.help-text {
-    font-size: 0.85em;
-    color: #888;
-    margin-top: 5px;
-    font-style: italic;
-}
-
-/* RESPONSIVE */
-@media (max-width: 480px) {
+/* ==========================================
+   RESPONSIVE (MÓVILES)
+   ========================================== */
+@media (max-width: 600px) {
     .container {
-        padding: 25px;
+        padding: 10px;
+    }
+    
+    .pantalla {
+        padding: 20px;
     }
     
     h1 {
-        font-size: 1.5em;
+        font-size: 24px;
     }
     
     .likert-container {
-        flex-wrap: wrap;
+        gap: 5px;
     }
     
-    .likert-option {
-        min-width: 60px;
+    .likert-option label {
+        padding: 15px 5px;
+        font-size: 16px;
     }
 }
