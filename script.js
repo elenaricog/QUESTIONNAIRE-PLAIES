@@ -115,9 +115,7 @@ function configurarPantallaBienvenida() {
     
     mostrarPantalla('pantalla-bienvenida');
 }
-    
-    mostrarPantalla('pantalla-bienvenida');
-}
+
 
 function mostrarPantalla(idPantalla) {
     document.querySelectorAll('.pantalla').forEach(p => p.classList.remove('activa'));
