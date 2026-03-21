@@ -85,8 +85,8 @@ body {
 h1 {
     background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
     color: white;
-    padding: 40px 30px;
-    font-size: 28px;
+    padding: 30px;
+    font-size: 26px;
     font-weight: 700;
     text-align: center;
     margin: 0;
@@ -95,8 +95,8 @@ h1 {
 .subtitle {
     text-align: center;
     color: var(--text-secondary);
-    font-size: 16px;
-    padding: 15px 30px;
+    font-size: 15px;
+    padding: 12px 30px;
     background: var(--primary-light);
     margin: 0;
     font-weight: 500;
@@ -104,26 +104,26 @@ h1 {
 
 h2 {
     color: var(--text-primary);
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 h3 {
     color: var(--primary);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    margin: 25px 0 12px 0;
+    margin: 15px 0 8px 0;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 /* ==========================================
-   INFO BOX (Bienvenida)
+   INFO BOX (Bienvenida) - COMPACTO
    ========================================== */
 .info-box {
-    padding: 30px;
+    padding: 20px 30px;
     background: var(--surface);
 }
 
@@ -132,20 +132,22 @@ h3 {
 }
 
 .info-box ul {
-    margin: 15px 0;
+    margin: 10px 0;
     padding-left: 20px;
 }
 
 .info-box li {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     color: var(--text-secondary);
-    line-height: 1.7;
+    line-height: 1.5;
+    font-size: 14px;
 }
 
 .info-box p {
     color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 15px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 
 /* Info del token */
@@ -153,19 +155,19 @@ h3 {
     background: linear-gradient(135deg, var(--primary-light) 0%, #e0e7ff 100%) !important;
     border: 2px solid var(--primary) !important;
     border-radius: var(--radius-sm) !important;
-    padding: 20px !important;
-    margin-bottom: 25px !important;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
     text-align: center;
     box-shadow: var(--shadow-sm);
 }
 
 #fase-texto {
-    font-size: 18px !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
 }
 
 #codigo-texto {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-secondary);
     font-weight: 500;
 }
@@ -174,17 +176,17 @@ h3 {
    BARRA DE PROGRESO
    ========================================== */
 .progress-bar {
-    height: 8px;
+    height: 6px;
     background: var(--border);
-    border-radius: 4px;
+    border-radius: 3px;
     overflow: hidden;
-    margin: 30px 30px 15px 30px;
+    margin: 25px 40px 12px 40px;
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--primary) 0%, #7c3aed 100%);
-    border-radius: 4px;
+    border-radius: 3px;
     transition: width 0.4s ease;
     box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
 }
@@ -192,25 +194,27 @@ h3 {
 .progress-text {
     text-align: center;
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 /* ==========================================
-   CONTENEDOR DE PREGUNTAS
+   CONTENEDOR DE PREGUNTAS - CENTRADO Y COMPACTO
    ========================================== */
 #contenedor-pregunta {
-    padding: 0 30px 30px 30px;
+    padding: 15px 40px;
+    max-width: 650px;
+    margin: 0 auto;
 }
 
 .pregunta-titulo {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     line-height: 1.5;
-    padding: 20px;
+    padding: 12px 18px;
     background: var(--primary-light);
     border-radius: var(--radius-sm);
     border-left: 4px solid var(--primary);
@@ -221,11 +225,13 @@ h3 {
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     border: 2px solid #f59e0b;
     border-radius: var(--radius-sm);
-    padding: 20px;
-    margin-bottom: 25px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
     font-style: italic;
     color: #92400e;
     box-shadow: var(--shadow-sm);
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 .caso-clinico strong {
@@ -234,24 +240,24 @@ h3 {
 }
 
 /* ==========================================
-   OPCIONES QCM
+   OPCIONES QCM - COMPACTAS
    ========================================== */
 .opciones-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .opcion {
     background: var(--surface);
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 18px 20px;
+    padding: 12px 16px;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     position: relative;
     overflow: hidden;
 }
@@ -270,26 +276,27 @@ h3 {
 }
 
 .opcion input[type="radio"] {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     accent-color: var(--primary);
     flex-shrink: 0;
 }
 
 .opcion span {
     font-weight: 500;
-    line-height: 1.5;
+    line-height: 1.4;
+    font-size: 14px;
 }
 
 /* ==========================================
-   ESCALA LIKERT
+   ESCALA LIKERT - COMPACTA
    ========================================== */
 .likert-container {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin: 30px 0;
-    max-width: 600px;
+    gap: 8px;
+    margin: 25px 0;
+    max-width: 500px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -305,12 +312,12 @@ h3 {
 
 .likert-option label {
     display: block;
-    padding: 25px 10px;
+    padding: 18px 6px;
     background: white;
     border: 2px solid var(--border);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--text-secondary);
     transition: all 0.2s ease;
@@ -335,9 +342,9 @@ h3 {
 .likert-labels {
     display: flex;
     justify-content: space-between;
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-secondary);
     font-weight: 500;
 }
@@ -347,16 +354,18 @@ h3 {
    ========================================== */
 .botones-navegacion {
     display: flex;
-    gap: 15px;
-    padding: 0 30px 30px 30px;
+    gap: 12px;
+    padding: 0 40px 25px 40px;
+    max-width: 650px;
+    margin: 0 auto;
 }
 
 .btn-primario, .btn-secundario {
     flex: 1;
-    padding: 16px 28px;
+    padding: 14px 24px;
     border: none;
     border-radius: var(--radius-sm);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -389,10 +398,10 @@ h3 {
 
 /* Botón de bienvenida */
 #pantalla-bienvenida .btn-primario {
-    margin: 0 30px 30px 30px;
+    margin: 0 30px 25px 30px;
     width: calc(100% - 60px);
-    padding: 20px;
-    font-size: 18px;
+    padding: 16px;
+    font-size: 16px;
 }
 
 /* ==========================================
@@ -400,28 +409,44 @@ h3 {
    ========================================== */
 #pantalla-final {
     text-align: center;
-    padding: 40px 30px;
+    padding: 30px;
 }
 
 #pantalla-final h2 {
     color: var(--success);
-    font-size: 28px;
-    margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
 #resumen-puntuacion {
     background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
     border: 2px solid var(--success);
     border-radius: var(--radius);
-    padding: 30px;
-    margin: 25px 0;
+    padding: 25px;
+    margin: 20px 0;
 }
 
 #pantalla-final .info-box {
     background: var(--background);
     border-radius: var(--radius-sm);
-    padding: 25px;
-    margin: 25px 0;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+/* ==========================================
+   CENTRADO VERTICAL EN PANTALLAS GRANDES
+   ========================================== */
+@media (min-height: 700px) {
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+    
+    .container {
+        width: 100%;
+    }
 }
 
 /* ==========================================
@@ -433,21 +458,35 @@ h3 {
     }
     
     h1 {
-        font-size: 22px;
-        padding: 30px 20px;
+        font-size: 20px;
+        padding: 25px 20px;
     }
     
-    .info-box, #contenedor-pregunta {
-        padding: 20px;
+    .subtitle {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+    
+    .info-box {
+        padding: 15px 20px;
+    }
+    
+    #contenedor-pregunta {
+        padding: 10px 20px;
+    }
+    
+    .pregunta-titulo {
+        font-size: 15px;
+        padding: 10px 14px;
     }
     
     .likert-option label {
-        padding: 20px 5px;
+        padding: 14px 4px;
         font-size: 16px;
     }
     
     .opcion {
-        padding: 15px;
+        padding: 10px 12px;
     }
     
     .botones-navegacion {
@@ -457,15 +496,17 @@ h3 {
     
     .btn-primario, .btn-secundario {
         width: 100%;
+        padding: 12px 20px;
+        font-size: 14px;
     }
 }
 
 /* ==========================================
-   ANIMACIONES EXTRA
+   ANIMACIONES
    ========================================== */
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    50% { transform: scale(1.02); }
 }
 
 .opcion.seleccionada {
