@@ -97,25 +97,24 @@ function mostrarError(mensaje) {
 }
 
 function configurarPantallaBienvenida() {
-    const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
-    const mensajeFase = document.createElement('div');
-    mensajeFase.id = 'info-fase';
-    mensajeFase.style.cssText = 'background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3498db; text-align: center;';
+    // Mostrar info del token en la pantalla de bienvenida
+    const infoUsuario = document.getElementById('info-usuario');
+    const faseTexto = document.getElementById('fase-texto');
+    const codigoTexto = document.getElementById('codigo-texto');
     
-    const color = tokenInfo.fase === 'PRE' ? '#2980b9' : '#27ae60';
-    const faseTexto = tokenInfo.fase === 'PRE' ? 'Pré-formation' : 'Post-formation';
-    
-    mensajeFase.innerHTML = `
-        <strong style="font-size: 16px; color: ${color};">📋 Phase : ${faseTexto}</strong><br>
-        <small style="color: #666;">Code anonyme : ${tokenInfo.codigo}</small>
-    `;
-    
-    const subtitle = pantallaBienvenida.querySelector('.subtitle');
-    if (subtitle && subtitle.nextSibling) {
-        pantallaBienvenida.insertBefore(mensajeFase, subtitle.nextSibling);
-    } else {
-        pantallaBienvenida.appendChild(mensajeFase);
+    if (infoUsuario && faseTexto && codigoTexto) {
+        faseTexto.textContent = tokenInfo.fase === 'PRE' ? 'Pré-formation' : 'Post-formation';
+        codigoTexto.textContent = tokenInfo.codigo;
+        infoUsuario.style.display = 'block';
+        
+        // Cambiar color según fase
+        const color = tokenInfo.fase === 'PRE' ? '#2980b9' : '#27ae60';
+        infoUsuario.style.borderLeftColor = color;
+        faseTexto.style.color = color;
     }
+    
+    mostrarPantalla('pantalla-bienvenida');
+}
     
     mostrarPantalla('pantalla-bienvenida');
 }
