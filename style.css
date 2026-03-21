@@ -1,74 +1,130 @@
 /* ==========================================
-   ESTILOS BÁSICOS
+   FUENTES Y RESET
    ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    line-height: 1.6;
+/* ==========================================
+   VARIABLES DE COLOR
+   ========================================== */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #dbeafe;
+    --secondary: #64748b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
 }
 
+/* ==========================================
+   TIPOGRAFÍA BASE
+   ========================================== */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+   ========================================== */
 .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================
-   SISTEMA DE PANTALLAS (IMPORTANTE)
+   SISTEMA DE PANTALLAS
    ========================================== */
 .pantalla {
-    display: none;  /* ← Todas ocultas por defecto */
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+    display: none;
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: slideUp 0.4s ease-out;
 }
 
 .pantalla.activa {
-    display: block;  /* ← Solo la activa visible */
+    display: block;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==========================================
-   TIPOGRAFÍA
+   HEADER Y TÍTULOS
    ========================================== */
 h1 {
-    color: #2c3e50;
-    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    padding: 40px 30px;
     font-size: 28px;
-}
-
-h2 {
-    color: #34495e;
-    margin-bottom: 15px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0;
 }
 
 .subtitle {
-    color: #7f8c8d;
+    text-align: center;
+    color: var(--text-secondary);
     font-size: 16px;
-    margin-bottom: 20px;
+    padding: 15px 30px;
+    background: var(--primary-light);
+    margin: 0;
+    font-weight: 500;
+}
+
+h2 {
+    color: var(--text-primary);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+h3 {
+    color: var(--primary);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 25px 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* ==========================================
-   CAJAS DE INFO
+   INFO BOX (Bienvenida)
    ========================================== */
 .info-box {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-}
-
-.info-box h3 {
-    color: #2c3e50;
-    margin: 15px 0 10px 0;
-    font-size: 16px;
+    padding: 30px;
+    background: var(--surface);
 }
 
 .info-box h3:first-child {
@@ -76,86 +132,105 @@ h2 {
 }
 
 .info-box ul {
-    margin-left: 20px;
-    margin-bottom: 10px;
+    margin: 15px 0;
+    padding-left: 20px;
 }
 
 .info-box li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+    line-height: 1.7;
 }
 
-/* ==========================================
-   BOTONES
-   ========================================== */
-.btn-primario {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: inline-block;
-    margin-top: 20px;
+.info-box p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 15px;
 }
 
-.btn-primario:hover {
-    background: #2980b9;
+/* Info del token */
+#info-usuario {
+    background: linear-gradient(135deg, var(--primary-light) 0%, #e0e7ff 100%) !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 20px !important;
+    margin-bottom: 25px !important;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
 }
 
-.btn-secundario {
-    background: #95a5a6;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+#fase-texto {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
+#codigo-texto {
     font-size: 14px;
-    border-radius: 5px;
-    cursor: pointer;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 /* ==========================================
    BARRA DE PROGRESO
    ========================================== */
 .progress-bar {
-    width: 100%;
-    height: 10px;
-    background: #ecf0f1;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
     overflow: hidden;
+    margin: 30px 30px 15px 30px;
 }
 
 .progress-fill {
     height: 100%;
-    background: #3498db;
-    width: 0%;
-    transition: width 0.3s ease;
+    background: linear-gradient(90deg, var(--primary) 0%, #7c3aed 100%);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
 }
 
 .progress-text {
     text-align: center;
-    color: #7f8c8d;
+    color: var(--text-secondary);
     font-size: 14px;
-    margin-bottom: 20px;
+    font-weight: 500;
+    margin-bottom: 25px;
 }
 
 /* ==========================================
-   PREGUNTAS
+   CONTENEDOR DE PREGUNTAS
    ========================================== */
-.pregunta-titulo {
-    font-size: 18px;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    line-height: 1.5;
+#contenedor-pregunta {
+    padding: 0 30px 30px 30px;
 }
 
+.pregunta-titulo {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 25px;
+    line-height: 1.5;
+    padding: 20px;
+    background: var(--primary-light);
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--primary);
+}
+
+/* Caso clínico */
 .caso-clinico {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 0 5px 5px 0;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 2px solid #f59e0b;
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 25px;
     font-style: italic;
+    color: #92400e;
+    box-shadow: var(--shadow-sm);
+}
+
+.caso-clinico strong {
+    color: #78350f;
+    font-weight: 600;
 }
 
 /* ==========================================
@@ -164,34 +239,46 @@ h2 {
 .opciones-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 12px;
 }
 
 .opcion {
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
-    padding: 15px;
-    border-radius: 8px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
+    position: relative;
+    overflow: hidden;
 }
 
 .opcion:hover {
-    background: #e9ecef;
-    border-color: #adb5bd;
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateX(5px);
+    box-shadow: var(--shadow);
 }
 
 .opcion.seleccionada {
-    background: #d4edda;
-    border-color: #28a745;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-color: var(--success);
+    color: #065f46;
 }
 
 .opcion input[type="radio"] {
-    margin: 0;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+    flex-shrink: 0;
+}
+
+.opcion span {
+    font-weight: 500;
+    line-height: 1.5;
 }
 
 /* ==========================================
@@ -200,14 +287,16 @@ h2 {
 .likert-container {
     display: flex;
     justify-content: space-between;
-    max-width: 500px;
-    margin: 20px auto;
     gap: 10px;
+    margin: 30px 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .likert-option {
-    text-align: center;
     flex: 1;
+    text-align: center;
 }
 
 .likert-option input[type="radio"] {
@@ -216,71 +305,169 @@ h2 {
 
 .likert-option label {
     display: block;
-    padding: 20px 10px;
-    background: #f8f9fa;
-    border: 2px solid #dee2e6;
-    border-radius: 8px;
+    padding: 25px 10px;
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    transition: all 0.2s;
-}
-
-.likert-option input[type="radio"]:checked + label {
-    background: #3498db;
-    color: white;
-    border-color: #2980b9;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .likert-option label:hover {
-    background: #e9ecef;
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.likert-option input[type="radio"]:checked + label {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
 }
 
 .likert-labels {
     display: flex;
     justify-content: space-between;
-    max-width: 500px;
-    margin: 10px auto;
-    font-size: 12px;
-    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 /* ==========================================
-   BOTONES DE NAVEGACIÓN
+   BOTONES
    ========================================== */
 .botones-navegacion {
     display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
     gap: 15px;
+    padding: 0 30px 30px 30px;
 }
 
-.botones-navegacion button {
+.btn-primario, .btn-secundario {
     flex: 1;
+    padding: 16px 28px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-primario {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: white;
+    box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+}
+
+.btn-primario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.23);
+}
+
+.btn-secundario {
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+}
+
+.btn-secundario:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+/* Botón de bienvenida */
+#pantalla-bienvenida .btn-primario {
+    margin: 0 30px 30px 30px;
+    width: calc(100% - 60px);
+    padding: 20px;
+    font-size: 18px;
+}
+
+/* ==========================================
+   PANTALLA FINAL
+   ========================================== */
+#pantalla-final {
+    text-align: center;
+    padding: 40px 30px;
+}
+
+#pantalla-final h2 {
+    color: var(--success);
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+#resumen-puntuacion {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 2px solid var(--success);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin: 25px 0;
+}
+
+#pantalla-final .info-box {
+    background: var(--background);
+    border-radius: var(--radius-sm);
+    padding: 25px;
+    margin: 25px 0;
 }
 
 /* ==========================================
    RESPONSIVE (MÓVILES)
    ========================================== */
 @media (max-width: 600px) {
-    .container {
+    body {
         padding: 10px;
     }
     
-    .pantalla {
+    h1 {
+        font-size: 22px;
+        padding: 30px 20px;
+    }
+    
+    .info-box, #contenedor-pregunta {
         padding: 20px;
     }
     
-    h1 {
-        font-size: 24px;
-    }
-    
-    .likert-container {
-        gap: 5px;
-    }
-    
     .likert-option label {
-        padding: 15px 5px;
+        padding: 20px 5px;
         font-size: 16px;
     }
+    
+    .opcion {
+        padding: 15px;
+    }
+    
+    .botones-navegacion {
+        flex-direction: column;
+        padding: 0 20px 20px 20px;
+    }
+    
+    .btn-primario, .btn-secundario {
+        width: 100%;
+    }
+}
+
+/* ==========================================
+   ANIMACIONES EXTRA
+   ========================================== */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.opcion.seleccionada {
+    animation: pulse 0.3s ease;
 }
