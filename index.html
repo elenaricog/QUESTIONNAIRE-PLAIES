@@ -9,19 +9,25 @@
 <body>
     <div class="container">
         
-        <!-- PANTALLA 0: BIENVENIDA (NUEVA) -->
+        <!-- PANTALLA 0: BIENVENIDA -->
         <div id="pantalla-bienvenida" class="pantalla activa">
             <h1>Questionnaire d'évaluation</h1>
             <p class="subtitle">Prise en charge des plaies et cicatrisation</p>
             
             <div class="info-box">
+                <!-- INFO DEL TOKEN (se rellena con JavaScript) -->
+                <div id="info-usuario" style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3498db; text-align: center; display: none;">
+                    <strong style="font-size: 16px; color: #2980b9;">📋 Phase : <span id="fase-texto"></span></strong><br>
+                    <small style="color: #666;">Code anonyme : <span id="codigo-texto"></span></small>
+                </div>
+                
                 <h3>📋 Objectif</h3>
-                <p>Ce questionnaire évalue les connaissances et pratiques des professionnels de santé en soins de plaies. Les résultats permettront d'adapter la formation continue.</p>
+                <p>Ce questionnaire évalue les connaissances et pratiques des professionnels de santé en soins de plaies.</p>
                 
                 <h3>🔒 Anonymat garanti</h3>
                 <ul>
                     <li>Aucune donnée nominative n'est collectée</li>
-                    <li>Identification par code anonyme uniquement (P01 à P12)</li>
+                    <li>Identification par code anonyme uniquement</li>
                     <li>Les résultats sont présentés de manière agrégée</li>
                 </ul>
                 
@@ -36,56 +42,17 @@
                 </ul>
             </div>
             
-            <button onclick="mostrarPantalla('pantalla-inicio')" class="btn-primario">
+            <button onclick="iniciarCuestionario()" class="btn-primario">
+                Commencer le questionnaire →
+            </button>
+        </div>
+            
+            <button onclick="iniciarCuestionario()" class="btn-primario">
                 Commencer le questionnaire →
             </button>
         </div>
 
-        <!-- PANTALLA 1: CÓDIGO Y MOMENTO -->
-        <div id="pantalla-inicio" class="pantalla">
-            <h1>Identification</h1>
-            <p class="subtitle">Veuillez sélectionner vos informations</p>
-            
-            <div class="form-group">
-                <label for="codigo">Code anonyme : *</label>
-                <select id="codigo" required>
-                    <option value="">-- Sélectionnez votre code --</option>
-                    <option value="P01">P01</option>
-                    <option value="P02">P02</option>
-                    <option value="P03">P03</option>
-                    <option value="P04">P04</option>
-                    <option value="P05">P05</option>
-                    <option value="P06">P06</option>
-                    <option value="P07">P07</option>
-                    <option value="P08">P08</option>
-                    <option value="P09">P09</option>
-                    <option value="P10">P10</option>
-                    <option value="P11">P11</option>
-                    <option value="P12">P12</option>
-                </select>
-                <p class="help-text">Ce code vous a été attribué préalablement.</p>
-            </div>
-            
-            <div class="form-group">
-                <label>Moment de l'évaluation : *</label>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="momento" value="Pre-formation" required>
-                        <strong>Pré-formation</strong> - Avant la session de formation
-                    </label>
-                    <label>
-                        <input type="radio" name="momento" value="Post-formation">
-                        <strong>Post-formation</strong> - Après la session de formation
-                    </label>
-                </div>
-            </div>
-            
-            <div class="botones-navegacion">
-                <button onclick="mostrarPantalla('pantalla-bienvenida')" class="btn-secundario">← Retour</button>
-                <button onclick="iniciarCuestionario()" class="btn-primario">Continuer →</button>
-            </div>
-        </div>
-
+        
         <!-- PANTALLA 2: PREGUNTAS -->
         <div id="pantalla-preguntas" class="pantalla">
             <div class="progress-bar">
