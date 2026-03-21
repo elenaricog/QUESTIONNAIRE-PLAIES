@@ -378,9 +378,6 @@ function seleccionarOpcion(preguntaId, valor) {
     }
 }
 
-// ==========================================
-// FUNCIÓN CORREGIDA - LÍNEA 398 ARREGLADA
-// ==========================================
 function guardarRespuesta(preguntaId, valor) {
     respuestas[preguntaId] = valor;  // ✅ CORREGIDO: era respuestas[pregunta.id]
     console.log('Respuesta guardada:', preguntaId, '=', valor);
