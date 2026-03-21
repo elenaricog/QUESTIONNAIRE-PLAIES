@@ -447,14 +447,12 @@ function finalizarCuestionario() {
 }
 
 function enviarConVerificacion(correctas, totalQCM) {
-    console.log('Enviando datos:', respuestas);
-    console.log('URL:', GOOGLE_SHEETS_URL);
+    console.log('Enviando:', respuestas);
     
-    // Crear formulario invisible para enviar datos (más compatible)
+    // Crear formulario para enviar
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = GOOGLE_SHEETS_URL;
-    form.target = '_blank'; // Abre en nueva pestaña para ver respuesta
     
     const input = document.createElement('input');
     input.type = 'hidden';
@@ -463,25 +461,14 @@ function enviarConVerificacion(correctas, totalQCM) {
     
     form.appendChild(input);
     document.body.appendChild(form);
-    
-    // Mostrar mensaje antes de enviar
-    document.body.innerHTML = `
-        <div style="max-width: 600px; margin: 100px auto; padding: 30px; text-align: center;">
-            <h2>⏳ Envoi en cours...</h2>
-            <p>Si une nouvelle fenêtre s'ouvre, c'est que l'envoi a fonctionné.</p>
-            <p>Vous pouvez fermer cette fenêtre après vérification.</p>
-        </div>
-    `;
-    
     form.submit();
     
-    // Marcar como enviado de todos modos
+    // Mostrar pantalla final después de enviar
     setTimeout(() => {
         marcarComoEnviado();
         mostrarPantallaFinal(correctas, totalQCM, true);
-    }, 2000);
+    }, 1000);
 }
-
 function marcarComoEnviado() {
     localStorage.setItem('token_usado_' + tokenInfo.token, 'true');
     localStorage.setItem('token_usado_fecha_' + tokenInfo.token, new Date().toISOString());
