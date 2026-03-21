@@ -23,7 +23,7 @@ window.onload = function() {
         return;
     }
     
-    if (!token.match(/^tk_[a-z0-9]+_(pre|post)$/)) {
+    if (!token.match(/^tk_[a-z0-9]{6}_(pre|post)$/)) {
         mostrarError('Lien invalide. Vérifiez l\'URL.');
         return;
     }
@@ -33,14 +33,37 @@ window.onload = function() {
     const codigoToken = partes[1];
     const fase = partes[2].toUpperCase();
     
-    const mapeoTokens = {
-        '7x9m2k': 'U01', '3p8n5q': 'U02', '4r7s8t': 'U03',
-        '9v2w1x': 'U04', '5y6z3a': 'U05', '8b4c7d': 'U06',
-        '1e5f9g': 'U07', '6h2i8j': 'U08', '0k4l7m': 'U09',
-        '2n5p8q': 'U10', '7r9s3t': 'U11', '4u6v1w': 'U12'
+    // ==========================================
+    // MAPEO DE TOKENS - 12 USUARIOS (U01 a U12)
+   // ==========================================
+    const MAPEO_TOKENS = {
+      // U01
+      'a1b2c3': 'U01',
+      // U02  
+      'd4e5f6': 'U02',
+      // U03
+      'g7h8i9': 'U03',
+      // U04
+      'j1k2l3': 'U04',
+      // U05
+      'm4n5o6': 'U05',
+       // U06
+       'p7q8r9': 'U06',
+       // U07
+       's1t2u3': 'U07',
+       // U08
+       'v4w5x6': 'U08',
+       // U09
+       'y7z8a9': 'U09',
+       // U10
+       'b1c2d3': 'U10',
+       // U11
+       'e4f5g6': 'U11',
+       // U12
+       'h7i8j9': 'U12'
     };
     
-    const codigoUsuario = mapeoTokens[codigoToken];
+    const codigoUsuario = MAPEO_TOKENS[codigoToken];
     
     if (!codigoUsuario) {
         mostrarError('Token non reconnu. Contactez l\'administratrice.');
